@@ -1,5 +1,5 @@
 # game-of-life-go
-An adaptation of Conway's Game of Life created with Go.
+An adaptation of [Conway's Game of Life](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life) created with Go for a hackathon at work.
 
 ## Installation
 ```
