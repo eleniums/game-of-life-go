@@ -10,37 +10,44 @@ import (
 )
 
 type Scene struct {
+	manager     *game.Manager
 	board       *ui.Board
-	cells       game.CellGrid
 	startButton *ui.Button
 	storeButton *ui.Button
 	resetButton *ui.Button
 	clearButton *ui.Button
-
-	stopped bool
 }
 
 func New() *Scene {
-	scene := &Scene{}
+	manager := game.NewManager()
+	board := ui.NewBoard()
 
-	scene.board = ui.NewBoard()
-	scene.cells = game.NewCellGrid(game.GridMaxX, game.GridMaxY)
+	storeButton := ui.NewButton(pixel.V(1000, 500), "STORE", nil)
+	resetButton := ui.NewButton(pixel.V(1000, 400), "RESET", nil)
+	clearButton := ui.NewButton(pixel.V(1000, 300), "CLEAR", nil)
 
-	scene.stopped = true
-	scene.startButton = ui.NewButton(pixel.V(1000, 600), "START", func(b *ui.Button) {
-		if scene.stopped {
+	startButton := ui.NewButton(pixel.V(1000, 600), "START", func(b *ui.Button) {
+		if !manager.Running() {
 			b.SetText("STOP")
+			storeButton.SetActive(false)
+			resetButton.SetActive(false)
+			clearButton.SetActive(false)
 		} else {
 			b.SetText("START")
+			storeButton.SetActive(true)
+			resetButton.SetActive(true)
+			clearButton.SetActive(true)
 		}
-		scene.stopped = !scene.stopped
 	})
 
-	scene.storeButton = ui.NewButton(pixel.V(1000, 500), "STORE", nil)
-	scene.resetButton = ui.NewButton(pixel.V(1000, 400), "RESET", nil)
-	scene.clearButton = ui.NewButton(pixel.V(1000, 300), "CLEAR", nil)
-
-	return scene
+	return &Scene{
+		manager:     manager,
+		board:       board,
+		startButton: startButton,
+		storeButton: storeButton,
+		resetButton: resetButton,
+		clearButton: clearButton,
+	}
 }
 
 func (s *Scene) Update(win *pixelgl.Window) {
@@ -61,5 +68,5 @@ func (s *Scene) Draw(win *pixelgl.Window) {
 	s.clearButton.Draw(win)
 
 	// board
-	s.board.Draw(win, s.cells)
+	s.board.Draw(win, s.manager.Cells())
 }

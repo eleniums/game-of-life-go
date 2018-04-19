@@ -1,14 +1,16 @@
 package game
 
 type Manager struct {
-	cells  CellGrid
-	buffer CellGrid
+	cells   CellGrid
+	buffer  CellGrid
+	running bool
 }
 
 func NewManager() *Manager {
 	return &Manager{
-		cells:  NewCellGrid(GridMaxX, GridMaxY),
-		buffer: NewCellGrid(GridMaxX, GridMaxY),
+		cells:   NewCellGrid(GridMaxX, GridMaxY),
+		buffer:  NewCellGrid(GridMaxX, GridMaxY),
+		running: false,
 	}
 }
 
@@ -29,4 +31,8 @@ func (m *Manager) Update() {
 
 func (m *Manager) Cells() CellGrid {
 	return m.cells
+}
+
+func (m *Manager) Running() bool {
+	return m.running
 }
