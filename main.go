@@ -8,6 +8,7 @@ import (
 
 	"github.com/eleniums/game-of-life-go/assets"
 	"github.com/eleniums/game-of-life-go/sprites"
+	"github.com/eleniums/game-of-life-go/ui"
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
 	"golang.org/x/image/colornames"
@@ -44,6 +45,8 @@ func run() {
 	}
 	win.SetSmooth(true) // remove pixelation
 
+	board := ui.NewBoard()
+
 	frames := 0
 	second := time.Tick(time.Second)
 
@@ -55,7 +58,11 @@ func run() {
 
 		win.Clear(colornames.Black)
 
+		// menu
 		sprites.Title.Draw(win, pixel.IM.Moved(pixel.V(1100, 800)))
+
+		// board
+		board.Draw(win)
 
 		win.Update()
 
