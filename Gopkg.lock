@@ -42,6 +42,15 @@
   revision = "5ab0e04e1f55a10f3a71b1fccc60ca2ee9a0bc02"
 
 [[projects]]
+  branch = "master"
+  name = "github.com/golang/freetype"
+  packages = [
+    "raster",
+    "truetype"
+  ]
+  revision = "e2365dfdc4a05e4b8299a783240d4a7d5a65d4e4"
+
+[[projects]]
   name = "github.com/pkg/errors"
   packages = ["."]
   revision = "645ef00459ed84a119197bfb8d8205042c6df63d"
@@ -62,6 +71,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "cd8e4a2c308eb57dbe8f4f4e33237efa936b58a7ada7ce3e71598ea2a8619a0a"
+  inputs-digest = "95ee0b1fc177275ca39e767dcfadc9081cba1c83fbed84c2c7939248b722e56d"
   solver-name = "gps-cdcl"
   solver-version = 1
