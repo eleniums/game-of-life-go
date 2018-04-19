@@ -7,12 +7,10 @@ import (
 	"time"
 
 	"github.com/eleniums/game-of-life-go/assets"
-	"github.com/eleniums/game-of-life-go/game"
+	"github.com/eleniums/game-of-life-go/scene"
 	"github.com/eleniums/game-of-life-go/sprites"
-	"github.com/eleniums/game-of-life-go/ui"
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
-	"golang.org/x/image/colornames"
 )
 
 func main() {
@@ -25,12 +23,11 @@ func run() {
 	resizable := flag.Bool("resizable", false, "allow resizing of the main window")
 	flag.Parse()
 
-	// load all assets
+	// load all assets and sprites
 	err := assets.Load()
 	if err != nil {
 		log.Fatalf("unable to load assets: %v", err)
 	}
-
 	sprites.Load()
 
 	// create new window
@@ -47,34 +44,21 @@ func run() {
 	}
 	win.SetSmooth(true) // remove pixelation
 
-	board := ui.NewBoard()
-	cells := game.NewCellGrid(game.GridMaxX, game.GridMaxY)
-
-	stopped := true
-	startButton := ui.NewButton(pixel.V(1000, 600), "START", func(b *ui.Button) {
-		if stopped {
-			b.SetText("STOP")
-		} else {
-			b.SetText("START")
-		}
-		stopped = !stopped
-	})
+	// create new scene containing all elements of the game
+	scene := scene.New()
 
 	frames := 0
 	second := time.Tick(time.Second)
 
 	// main update loop
 	for !win.Closed() {
-		win.Clear(colornames.Black)
+		// update all objects in the scene
+		scene.Update(win)
 
-		// menu
-		sprites.Title.Draw(win, pixel.IM.Moved(pixel.V(1100, 800)))
-		startButton.Update(win)
-		startButton.Draw(win)
+		// draw all objects in the scene
+		scene.Draw(win)
 
-		// board
-		board.Draw(win, cells)
-
+		// swap buffers and poll for events
 		win.Update()
 
 		// calculate FPS

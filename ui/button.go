@@ -57,6 +57,10 @@ func (b *Button) SetActive(enabled bool) {
 	b.enabled = enabled
 }
 
+func (b *Button) Size() pixel.Rect {
+	return b.size
+}
+
 func (b *Button) Draw(t pixel.Target) {
 	b.border.Draw(t)
 	b.fill.Draw(t)
@@ -74,7 +78,7 @@ func (b *Button) Update(win *pixelgl.Window) {
 
 		if mpos.X < b.position.X || mpos.X > b.position.X+b.size.W() || mpos.Y < b.position.Y || mpos.Y > b.position.Y+b.size.H() {
 			// do nothing
-		} else {
+		} else if b.action != nil {
 			b.action(b)
 		}
 	}
