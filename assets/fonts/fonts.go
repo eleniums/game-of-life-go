@@ -1,20 +1,22 @@
 package fonts
 
 import (
+	"github.com/faiface/pixel/text"
 	"github.com/golang/freetype/truetype"
-	"golang.org/x/image/font"
 )
 
-func Load(data []byte, size float64) (font.Face, error) {
+func Load(data []byte, size float64) (*text.Atlas, error) {
 	font, err := truetype.Parse(data)
 	if err != nil {
 		return nil, err
 	}
 
-	return truetype.NewFace(font, &truetype.Options{
+	face := truetype.NewFace(font, &truetype.Options{
 		Size:              size,
 		GlyphCacheEntries: 1,
-	}), nil
+	})
+
+	return text.NewAtlas(face, text.ASCII), nil
 }
 
 var (

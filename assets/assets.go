@@ -4,15 +4,15 @@ import (
 	"github.com/eleniums/game-of-life-go/assets/fonts"
 	"github.com/eleniums/game-of-life-go/assets/images"
 	"github.com/faiface/pixel"
-	"golang.org/x/image/font"
+	"github.com/faiface/pixel/text"
 )
 
 var (
-	Icon16x16 pixel.Picture
-	Title     pixel.Picture
-	CellMap   pixel.Picture
-	GrassMap  pixel.Picture
-	PixelFont font.Face
+	Icon16x16  pixel.Picture
+	Title      pixel.Picture
+	CellMap    pixel.Picture
+	GrassMap   pixel.Picture
+	PixelAtlas *text.Atlas
 )
 
 func Load() error {
@@ -38,7 +38,7 @@ func Load() error {
 		return err
 	}
 
-	PixelFont, err = fonts.Load(fonts.PixelData, 40)
+	PixelAtlas, err = fonts.Load(fonts.PixelData, 40)
 	if err != nil {
 		return err
 	}
