@@ -4,6 +4,7 @@ import (
 	"math/rand"
 
 	"github.com/eleniums/game-of-life-go/assets"
+	"github.com/eleniums/game-of-life-go/game"
 	"github.com/eleniums/game-of-life-go/sprites"
 	"github.com/faiface/pixel"
 )
@@ -14,48 +15,73 @@ const (
 )
 
 type Board struct {
-	batch *pixel.Batch
-	grid  [][]int
+	grassGrid  [][]int
+	grassBatch *pixel.Batch
+	cellBatch  *pixel.Batch
 }
 
 func NewBoard() *Board {
-	batch := pixel.NewBatch(&pixel.TrianglesData{}, assets.GrassMap)
+	grassBatch := pixel.NewBatch(&pixel.TrianglesData{}, assets.GrassMap)
+	cellBatch := pixel.NewBatch(&pixel.TrianglesData{}, assets.CellMap)
 
 	// randomize background tiles
-	grid := make([][]int, boardMaxX)
+	grassGrid := make([][]int, boardMaxX)
 	for x := 0; x < boardMaxX; x++ {
-		grid[x] = make([]int, boardMaxY)
+		grassGrid[x] = make([]int, boardMaxY)
 		for y := 0; y < boardMaxY; y++ {
-			grid[x][y] = rand.Intn(4)
+			grassGrid[x][y] = rand.Intn(4)
 		}
 	}
 
 	return &Board{
-		batch: batch,
-		grid:  grid,
+		grassGrid:  grassGrid,
+		grassBatch: grassBatch,
+		cellBatch:  cellBatch,
 	}
 }
 
-func (b *Board) Draw(t pixel.Target) {
-	b.batch.Clear()
+func (b *Board) Draw(t pixel.Target, cells game.CellGrid) {
+	b.grassBatch.Clear()
+	b.cellBatch.Clear()
 
-	for x := range b.grid {
-		for y := range b.grid[x] {
-			switch b.grid[x][y] {
+	// draw grass to batch
+	for x := range b.grassGrid {
+		for y := range b.grassGrid[x] {
+			switch b.grassGrid[x][y] {
 			case 0:
-				draw(b.batch, sprites.Grass1, x, y)
+				draw(b.grassBatch, sprites.Grass1, x, y)
 			case 1:
-				draw(b.batch, sprites.Grass2, x, y)
+				draw(b.grassBatch, sprites.Grass2, x, y)
 			case 2:
-				draw(b.batch, sprites.Grass3, x, y)
+				draw(b.grassBatch, sprites.Grass3, x, y)
 			case 3:
-				draw(b.batch, sprites.Grass4, x, y)
+				draw(b.grassBatch, sprites.Grass4, x, y)
 			default:
 			}
 		}
 	}
 
-	b.batch.Draw(t)
+	// draw cells to batch
+	for x := range cells {
+		for y := range cells[x] {
+			if cells[x][y].Alive {
+				switch cells[x][y].Type {
+				case 0:
+					draw(b.cellBatch, sprites.Cell1, x, y)
+				case 1:
+					draw(b.cellBatch, sprites.Cell2, x, y)
+				case 2:
+					draw(b.cellBatch, sprites.Cell3, x, y)
+				case 3:
+					draw(b.cellBatch, sprites.Cell4, x, y)
+				default:
+				}
+			}
+		}
+	}
+
+	b.grassBatch.Draw(t)
+	b.cellBatch.Draw(t)
 }
 
 func draw(batch *pixel.Batch, tile *pixel.Sprite, xpos, ypos int) {

@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/eleniums/game-of-life-go/assets"
+	"github.com/eleniums/game-of-life-go/game"
 	"github.com/eleniums/game-of-life-go/sprites"
 	"github.com/eleniums/game-of-life-go/ui"
 	"github.com/faiface/pixel"
@@ -35,6 +36,7 @@ func run() {
 	// create new window
 	cfg := pixelgl.WindowConfig{
 		Title:     "Game of Life",
+		Icon:      []pixel.Picture{assets.Icon16x16},
 		Bounds:    pixel.R(0, 0, 1260, 960),
 		VSync:     true, // update at the refresh rate of the monitor
 		Resizable: *resizable,
@@ -46,23 +48,20 @@ func run() {
 	win.SetSmooth(true) // remove pixelation
 
 	board := ui.NewBoard()
+	cells := game.NewCellGrid(game.GridMaxX, game.GridMaxY)
 
 	frames := 0
 	second := time.Tick(time.Second)
 
 	// main update loop
-	//last := time.Now()
 	for !win.Closed() {
-		//dt := time.Since(last).Seconds()
-		//last = time.Now()
-
 		win.Clear(colornames.Black)
 
 		// menu
 		sprites.Title.Draw(win, pixel.IM.Moved(pixel.V(1100, 800)))
 
 		// board
-		board.Draw(win)
+		board.Draw(win, cells)
 
 		win.Update()
 
