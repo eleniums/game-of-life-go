@@ -7,8 +7,10 @@ import (
 	"time"
 
 	"github.com/eleniums/game-of-life-go/assets"
+	"github.com/eleniums/game-of-life-go/sprites"
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
+	"golang.org/x/image/colornames"
 )
 
 func main() {
@@ -26,6 +28,8 @@ func run() {
 	if err != nil {
 		log.Fatalf("unable to load assets: %v", err)
 	}
+
+	sprites.Load()
 
 	// create new window
 	cfg := pixelgl.WindowConfig{
@@ -48,6 +52,10 @@ func run() {
 	for !win.Closed() {
 		//dt := time.Since(last).Seconds()
 		//last = time.Now()
+
+		win.Clear(colornames.Black)
+
+		sprites.Title.Draw(win, pixel.IM.Moved(pixel.V(1100, 800)))
 
 		win.Update()
 
