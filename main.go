@@ -50,6 +50,16 @@ func run() {
 	board := ui.NewBoard()
 	cells := game.NewCellGrid(game.GridMaxX, game.GridMaxY)
 
+	stopped := true
+	startButton := ui.NewButton(pixel.V(1000, 600), "START", func(b *ui.Button) {
+		if stopped {
+			b.SetText("STOP")
+		} else {
+			b.SetText("START")
+		}
+		stopped = !stopped
+	})
+
 	frames := 0
 	second := time.Tick(time.Second)
 
@@ -59,6 +69,8 @@ func run() {
 
 		// menu
 		sprites.Title.Draw(win, pixel.IM.Moved(pixel.V(1100, 800)))
+		startButton.Update(win)
+		startButton.Draw(win)
 
 		// board
 		board.Draw(win, cells)
