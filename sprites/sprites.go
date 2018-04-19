@@ -24,10 +24,10 @@ func Load() {
 	Title = pixel.NewSprite(assets.Title, assets.Title.Bounds())
 	Icon16x16 = pixel.NewSprite(assets.Icon16x16, assets.Icon16x16.Bounds())
 
-	Cell1 = pixel.NewSprite(assets.CellMap, pixel.R(0, 0, 10, 10))
-	Cell2 = pixel.NewSprite(assets.CellMap, pixel.R(10, 0, 20, 10))
-	Cell3 = pixel.NewSprite(assets.CellMap, pixel.R(0, 10, 10, 20))
-	Cell4 = pixel.NewSprite(assets.CellMap, pixel.R(10, 10, 20, 20))
+	Cell1 = pixel.NewSprite(assets.CellMap, pixel.R(0, 10, 10, 20))
+	Cell2 = pixel.NewSprite(assets.CellMap, pixel.R(10, 10, 20, 20))
+	Cell3 = pixel.NewSprite(assets.CellMap, pixel.R(0, 0, 10, 10))
+	Cell4 = pixel.NewSprite(assets.CellMap, pixel.R(10, 0, 20, 10))
 
 	Grass1 = pixel.NewSprite(assets.GrassMap, pixel.R(0, 0, 160, 160))
 	Grass2 = pixel.NewSprite(assets.GrassMap, pixel.R(160, 0, 320, 160))
