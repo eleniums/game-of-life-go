@@ -7,11 +7,11 @@ const (
 
 type CellGrid [][]*Cell
 
-func NewCellGrid(xdim, ydim int) CellGrid {
-	grid := make(CellGrid, xdim)
-	for x := 0; x < xdim; x++ {
-		grid[x] = make([]*Cell, ydim)
-		for y := 0; y < ydim; y++ {
+func NewCellGrid() CellGrid {
+	grid := make(CellGrid, GridMaxX)
+	for x := 0; x < GridMaxX; x++ {
+		grid[x] = make([]*Cell, GridMaxY)
+		for y := 0; y < GridMaxY; y++ {
 			grid[x][y] = &Cell{
 				Alive: false,
 				Type:  0,
@@ -25,9 +25,21 @@ func NewCellGrid(xdim, ydim int) CellGrid {
 func (c CellGrid) Clear() {
 	for x := range c {
 		for y := range c[x] {
-			c[x][y].Reset()
+			c[x][y].Clear()
 		}
 	}
+}
+
+func (c CellGrid) Copy() CellGrid {
+	grid := make(CellGrid, GridMaxX)
+	for x := 0; x < GridMaxX; x++ {
+		grid[x] = make([]*Cell, GridMaxY)
+		for y := 0; y < GridMaxY; y++ {
+			grid[x][y] = c[x][y].Copy()
+		}
+	}
+
+	return grid
 }
 
 func (c CellGrid) IsAlive(x, y int) bool {

@@ -11,14 +11,16 @@ var (
 type Manager struct {
 	cells   CellGrid
 	buffer  CellGrid
+	memory  CellGrid
 	running bool
 	ticker  *time.Ticker
 }
 
 func NewManager() *Manager {
 	return &Manager{
-		cells:   NewCellGrid(GridMaxX, GridMaxY),
-		buffer:  NewCellGrid(GridMaxX, GridMaxY),
+		cells:   NewCellGrid(),
+		buffer:  NewCellGrid(),
+		memory:  NewCellGrid(),
 		running: false,
 	}
 }
@@ -57,6 +59,14 @@ func (m *Manager) Stop() {
 func (m *Manager) Clear() {
 	m.cells.Clear()
 	m.buffer.Clear()
+}
+
+func (m *Manager) Store() {
+	m.memory = m.cells.Copy()
+}
+
+func (m *Manager) Reset() {
+	m.cells = m.memory.Copy()
 }
 
 func (m *Manager) Cells() CellGrid {

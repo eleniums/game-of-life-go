@@ -22,9 +22,13 @@ func New() *Scene {
 	manager := game.NewManager()
 	board := ui.NewBoard()
 
-	storeButton := ui.NewButton(pixel.V(1000, 500), "STORE", nil)
+	storeButton := ui.NewButton(pixel.V(1000, 500), "STORE", func(b *ui.Button) {
+		manager.Store()
+	})
 
-	resetButton := ui.NewButton(pixel.V(1000, 400), "RESET", nil)
+	resetButton := ui.NewButton(pixel.V(1000, 400), "RESET", func(b *ui.Button) {
+		manager.Reset()
+	})
 
 	clearButton := ui.NewButton(pixel.V(1000, 300), "CLEAR", func(b *ui.Button) {
 		manager.Clear()
