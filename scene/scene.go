@@ -16,6 +16,7 @@ type Scene struct {
 	storeButton *ui.Button
 	resetButton *ui.Button
 	clearButton *ui.Button
+	bounds      pixel.Rect
 }
 
 func New() *Scene {
@@ -61,6 +62,15 @@ func New() *Scene {
 }
 
 func (s *Scene) Update(win *pixelgl.Window) {
+	if s.bounds.W() != win.Bounds().W() || s.bounds.H() != win.Bounds().H() {
+		s.bounds = win.Bounds()
+
+		s.startButton.SetPosition(pixel.V(s.bounds.Max.X-150-s.startButton.Size().W()/2, s.bounds.Max.Y-360))
+		s.storeButton.SetPosition(pixel.V(s.bounds.Max.X-150-s.storeButton.Size().W()/2, s.bounds.Max.Y-460))
+		s.resetButton.SetPosition(pixel.V(s.bounds.Max.X-150-s.resetButton.Size().W()/2, s.bounds.Max.Y-560))
+		s.clearButton.SetPosition(pixel.V(s.bounds.Max.X-150-s.clearButton.Size().W()/2, s.bounds.Max.Y-660))
+	}
+
 	s.board.Update(win, s.manager.Cells())
 
 	s.startButton.Update(win)

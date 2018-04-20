@@ -57,6 +57,10 @@ func (b *Button) SetActive(enabled bool) {
 	b.enabled = enabled
 }
 
+func (b *Button) Position() pixel.Vec {
+	return b.position
+}
+
 func (b *Button) Size() pixel.Rect {
 	return b.size
 }
