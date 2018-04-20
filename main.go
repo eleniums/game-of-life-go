@@ -22,6 +22,7 @@ func main() {
 func run() {
 	interval := flag.Int("interval", 100, "simulation update interval in ms")
 	resizable := flag.Bool("resizable", false, "allow resizing of the main window")
+	pattern := flag.String("pattern", "", "name of pattern file in testdata to load as initial state (ex: -pattern diehard)")
 	flag.Parse()
 
 	// load all assets and sprites
@@ -48,6 +49,11 @@ func run() {
 	// create new scene containing all elements of the game
 	game.Interval = *interval
 	scene := scene.New()
+
+	// load pattern if requested
+	if *pattern != "" {
+		scene.Load(*pattern)
+	}
 
 	frames := 0
 	second := time.Tick(time.Second)

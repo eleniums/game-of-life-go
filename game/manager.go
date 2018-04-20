@@ -1,6 +1,8 @@
 package game
 
 import (
+	"encoding/json"
+	"io/ioutil"
 	"time"
 )
 
@@ -69,10 +71,49 @@ func (m *Manager) Reset() {
 	m.cells = m.memory.Copy()
 }
 
+func (m *Manager) Save(path string) error {
+	return save(m.cells, path)
+}
+
+func (m *Manager) Load(path string) error {
+	cells, err := load(path)
+	if err != nil {
+		return err
+	}
+
+	m.cells = cells
+	m.buffer.Clear()
+
+	return nil
+}
+
 func (m *Manager) Cells() CellGrid {
 	return m.cells
 }
 
 func (m *Manager) Running() bool {
 	return m.running
+}
+
+func save(cells CellGrid, path string) error {
+	data, err := json.Marshal(cells)
+	if err != nil {
+		return err
+	}
+
+	err = ioutil.WriteFile(path, data, 0644)
+
+	return err
+}
+
+func load(path string) (CellGrid, error) {
+	data, err := ioutil.ReadFile(path)
+	if err != nil {
+		return nil, err
+	}
+
+	var cells CellGrid
+	err = json.Unmarshal(data, &cells)
+
+	return cells, err
 }

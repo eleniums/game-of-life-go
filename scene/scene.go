@@ -1,12 +1,20 @@
 package scene
 
 import (
+	"fmt"
+	"log"
+	"os"
+
 	"github.com/eleniums/game-of-life-go/game"
 	"github.com/eleniums/game-of-life-go/sprites"
 	"github.com/eleniums/game-of-life-go/ui"
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
 	"golang.org/x/image/colornames"
+)
+
+const (
+	PatternFolder = "testdata"
 )
 
 type Scene struct {
@@ -21,52 +29,46 @@ type Scene struct {
 }
 
 func New() *Scene {
-	manager := game.NewManager()
-	board := ui.NewBoard()
+	scene := &Scene{}
 
-	storeButton := ui.NewButton(pixel.V(1000, 500), "STORE", func(b *ui.Button) {
-		manager.Store()
+	scene.manager = game.NewManager()
+	scene.board = ui.NewBoard()
+
+	scene.storeButton = ui.NewButton(pixel.V(1000, 500), "STORE", func(b *ui.Button) {
+		scene.manager.Store()
 	})
 
-	resetButton := ui.NewButton(pixel.V(1000, 400), "RESET", func(b *ui.Button) {
-		manager.Reset()
+	scene.resetButton = ui.NewButton(pixel.V(1000, 400), "RESET", func(b *ui.Button) {
+		scene.manager.Reset()
 	})
 
-	clearButton := ui.NewButton(pixel.V(1000, 300), "CLEAR", func(b *ui.Button) {
-		manager.Clear()
+	scene.clearButton = ui.NewButton(pixel.V(1000, 300), "CLEAR", func(b *ui.Button) {
+		scene.manager.Clear()
 	})
 
-	saveButton := ui.NewButton(pixel.V(1000, 200), "SAVE", func(b *ui.Button) {
-		//manager.Save()
+	scene.saveButton = ui.NewButton(pixel.V(1000, 200), "SAVE", func(b *ui.Button) {
+		scene.Save("saved")
 	})
 
-	startButton := ui.NewButton(pixel.V(1000, 600), "START", func(b *ui.Button) {
-		if !manager.Running() {
+	scene.startButton = ui.NewButton(pixel.V(1000, 600), "START", func(b *ui.Button) {
+		if !scene.manager.Running() {
 			b.SetText("STOP")
-			storeButton.SetActive(false)
-			resetButton.SetActive(false)
-			clearButton.SetActive(false)
-			saveButton.SetActive(false)
-			manager.Start()
+			scene.storeButton.SetActive(false)
+			scene.resetButton.SetActive(false)
+			scene.clearButton.SetActive(false)
+			scene.saveButton.SetActive(false)
+			scene.manager.Start()
 		} else {
 			b.SetText("START")
-			storeButton.SetActive(true)
-			resetButton.SetActive(true)
-			clearButton.SetActive(true)
-			saveButton.SetActive(true)
-			manager.Stop()
+			scene.storeButton.SetActive(true)
+			scene.resetButton.SetActive(true)
+			scene.clearButton.SetActive(true)
+			scene.saveButton.SetActive(true)
+			scene.manager.Stop()
 		}
 	})
 
-	return &Scene{
-		manager:     manager,
-		board:       board,
-		startButton: startButton,
-		storeButton: storeButton,
-		resetButton: resetButton,
-		clearButton: clearButton,
-		saveButton:  saveButton,
-	}
+	return scene
 }
 
 func (s *Scene) Update(win *pixelgl.Window) {
@@ -104,4 +106,26 @@ func (s *Scene) Draw(win *pixelgl.Window) {
 
 	// board
 	s.board.Draw(win, s.manager.Cells())
+}
+
+func (s *Scene) Save(pattern string) {
+	if _, err := os.Stat(PatternFolder); os.IsNotExist(err) {
+		err := os.Mkdir(PatternFolder, os.ModePerm)
+		if err != nil {
+			log.Printf("error creating pattern directory: %v", err)
+			return
+		}
+	}
+
+	err := s.manager.Save(fmt.Sprintf("%s/%s", PatternFolder, pattern))
+	if err != nil {
+		log.Printf("error saving pattern: %v", err)
+	}
+}
+
+func (s *Scene) Load(pattern string) {
+	err := s.manager.Load(fmt.Sprintf("%s/%s", PatternFolder, pattern))
+	if err != nil {
+		log.Printf("error loading pattern: %v", err)
+	}
 }
