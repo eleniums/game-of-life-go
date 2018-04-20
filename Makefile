@@ -1,11 +1,11 @@
 EXECUTABLE=gameoflife.exe
 
-all: game
+all: $(EXECUTABLE)
 
 deps:
 	dep ensure
 
-game:
+$(EXECUTABLE):
 	go build -o $(EXECUTABLE) main.go
 
 clean:

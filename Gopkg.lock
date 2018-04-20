@@ -17,6 +17,7 @@
   name = "github.com/faiface/pixel"
   packages = [
     ".",
+    "imdraw",
     "pixelgl",
     "text"
   ]
@@ -42,6 +43,15 @@
   revision = "5ab0e04e1f55a10f3a71b1fccc60ca2ee9a0bc02"
 
 [[projects]]
+  branch = "master"
+  name = "github.com/golang/freetype"
+  packages = [
+    "raster",
+    "truetype"
+  ]
+  revision = "e2365dfdc4a05e4b8299a783240d4a7d5a65d4e4"
+
+[[projects]]
   name = "github.com/pkg/errors"
   packages = ["."]
   revision = "645ef00459ed84a119197bfb8d8205042c6df63d"
@@ -51,6 +61,7 @@
   branch = "master"
   name = "golang.org/x/image"
   packages = [
+    "colornames",
     "font",
     "font/basicfont",
     "font/plan9font",
@@ -59,9 +70,18 @@
   ]
   revision = "f315e440302883054d0c2bd85486878cb4f8572c"
 
+[[projects]]
+  branch = "master"
+  name = "golang.org/x/net"
+  packages = [
+    "html",
+    "html/atom"
+  ]
+  revision = "d41e8174641f662c5a2d1c7a5f9e828788eb8706"
+
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "cd8e4a2c308eb57dbe8f4f4e33237efa936b58a7ada7ce3e71598ea2a8619a0a"
+  inputs-digest = "982d08b202d86492136ac7024fae52dc411e4e4202ff302d1ac1d37c7d97c752"
   solver-name = "gps-cdcl"
   solver-version = 1
