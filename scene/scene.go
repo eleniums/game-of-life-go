@@ -51,6 +51,8 @@ func New() *Scene {
 }
 
 func (s *Scene) Update(win *pixelgl.Window) {
+	s.board.Update(win, s.manager.Cells())
+
 	s.startButton.Update(win)
 	s.storeButton.Update(win)
 	s.resetButton.Update(win)

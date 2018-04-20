@@ -7,6 +7,7 @@ import (
 	"github.com/eleniums/game-of-life-go/game"
 	"github.com/eleniums/game-of-life-go/sprites"
 	"github.com/faiface/pixel"
+	"github.com/faiface/pixel/pixelgl"
 )
 
 const (
@@ -37,6 +38,21 @@ func NewBoard() *Board {
 		grassGrid:  grassGrid,
 		grassBatch: grassBatch,
 		cellBatch:  cellBatch,
+	}
+}
+
+func (b *Board) Update(win *pixelgl.Window, cells game.CellGrid) {
+	if win.JustPressed(pixelgl.MouseButtonLeft) {
+		mpos := win.MousePosition()
+
+		x := int(mpos.X / 10)
+		y := int(mpos.Y / 10)
+
+		if x < 0 || x >= game.GridMaxX || y < 0 || y >= game.GridMaxY {
+			// do nothing
+		} else {
+			cells[x][y].Alive = !cells[x][y].Alive
+		}
 	}
 }
 
