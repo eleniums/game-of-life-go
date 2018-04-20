@@ -17,6 +17,7 @@
   name = "github.com/faiface/pixel"
   packages = [
     ".",
+    "imdraw",
     "pixelgl",
     "text"
   ]
@@ -60,6 +61,7 @@
   branch = "master"
   name = "golang.org/x/image"
   packages = [
+    "colornames",
     "font",
     "font/basicfont",
     "font/plan9font",
@@ -68,9 +70,18 @@
   ]
   revision = "f315e440302883054d0c2bd85486878cb4f8572c"
 
+[[projects]]
+  branch = "master"
+  name = "golang.org/x/net"
+  packages = [
+    "html",
+    "html/atom"
+  ]
+  revision = "d41e8174641f662c5a2d1c7a5f9e828788eb8706"
+
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "95ee0b1fc177275ca39e767dcfadc9081cba1c83fbed84c2c7939248b722e56d"
+  inputs-digest = "982d08b202d86492136ac7024fae52dc411e4e4202ff302d1ac1d37c7d97c752"
   solver-name = "gps-cdcl"
   solver-version = 1
