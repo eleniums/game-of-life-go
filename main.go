@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"math/rand"
 	"time"
 
 	"github.com/eleniums/game-of-life-go/assets"
@@ -23,7 +24,11 @@ func run() {
 	interval := flag.Int("interval", 100, "simulation update interval in ms")
 	resizable := flag.Bool("resizable", false, "allow resizing of the main window")
 	pattern := flag.String("pattern", "", "name of pattern file in testdata to load as initial state (ex: -pattern diehard)")
+	reproduce := flag.String("reproduce", "majority-wins", "how to determine cell type when cell becomes alive (majority-wins|random-percentage)")
 	flag.Parse()
+
+	// seed random numbers
+	rand.Seed(time.Now().UTC().UnixNano())
 
 	// load all assets and sprites
 	err := assets.Load()
@@ -53,6 +58,16 @@ func run() {
 	// load pattern if requested
 	if *pattern != "" {
 		scene.Load(*pattern)
+	}
+
+	// set reproduction type
+	switch *reproduce {
+	case "majority-wins":
+		game.ReproduceMethod = game.ReproduceType_MajorityWins
+	case "random-percentage":
+		game.ReproduceMethod = game.ReproduceType_RandomPercentage
+	default:
+		game.ReproduceMethod = game.ReproduceType_MajorityWins
 	}
 
 	frames := 0
