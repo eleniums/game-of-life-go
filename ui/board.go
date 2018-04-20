@@ -100,7 +100,7 @@ func (b *Board) Draw(t pixel.Target, cells game.CellGrid) {
 	b.cellBatch.Draw(t)
 }
 
-func draw(batch *pixel.Batch, tile *pixel.Sprite, xpos, ypos int) {
-	loc := pixel.V(tile.Frame().W()/2+tile.Frame().W()*float64(xpos), tile.Frame().H()/2+tile.Frame().H()*float64(ypos))
+func draw(batch *pixel.Batch, tile *pixel.Sprite, x, y int) {
+	loc := pixel.V(tile.Frame().W()/2+tile.Frame().W()*float64(x), tile.Frame().H()/2+tile.Frame().H()*float64(y))
 	tile.Draw(batch, pixel.IM.Moved(loc))
 }

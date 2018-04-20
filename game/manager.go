@@ -1,6 +1,8 @@
 package game
 
-import "time"
+import (
+	"time"
+)
 
 var (
 	Interval = 1000
@@ -28,7 +30,7 @@ func (m *Manager) Update() {
 			// iterate over grid and apply rules
 			for x := range m.cells {
 				for y := range m.cells[x] {
-					neighbors := countNeighbors(m.cells, x, y)
+					neighbors := m.cells.CountNeighbors(x, y)
 					m.buffer[x][y].Alive = applyRules(m.cells[x][y].Alive, neighbors)
 				}
 			}
