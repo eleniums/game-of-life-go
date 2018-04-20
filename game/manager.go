@@ -1,5 +1,9 @@
 package game
 
+var (
+	Interval = 1000
+)
+
 type Manager struct {
 	cells   CellGrid
 	buffer  CellGrid
@@ -27,6 +31,14 @@ func (m *Manager) Update() {
 	temp := m.cells
 	m.cells = m.buffer
 	m.buffer = temp
+}
+
+func (m *Manager) Start() {
+	m.running = true
+}
+
+func (m *Manager) Stop() {
+	m.running = false
 }
 
 func (m *Manager) Cells() CellGrid {

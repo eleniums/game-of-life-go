@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/eleniums/game-of-life-go/assets"
+	"github.com/eleniums/game-of-life-go/game"
 	"github.com/eleniums/game-of-life-go/scene"
 	"github.com/eleniums/game-of-life-go/sprites"
 	"github.com/faiface/pixel"
@@ -19,7 +20,7 @@ func main() {
 }
 
 func run() {
-	//interval := flag.Int("interval", 1000, "simulation update interval in ms")
+	interval := flag.Int("interval", 1000, "simulation update interval in ms")
 	resizable := flag.Bool("resizable", false, "allow resizing of the main window")
 	flag.Parse()
 
@@ -45,6 +46,7 @@ func run() {
 	win.SetSmooth(true) // remove pixelation
 
 	// create new scene containing all elements of the game
+	game.Interval = *interval
 	scene := scene.New()
 
 	frames := 0

@@ -32,11 +32,13 @@ func New() *Scene {
 			storeButton.SetActive(false)
 			resetButton.SetActive(false)
 			clearButton.SetActive(false)
+			manager.Start()
 		} else {
 			b.SetText("START")
 			storeButton.SetActive(true)
 			resetButton.SetActive(true)
 			clearButton.SetActive(true)
+			manager.Stop()
 		}
 	})
 
