@@ -46,16 +46,9 @@ func NewBoard() *Board {
 
 func (b *Board) Update(win *pixelgl.Window, cells game.CellGrid) {
 	if win.JustPressed(pixelgl.MouseButtonLeft) {
-		mpos := win.MousePosition()
-
-		x := int(mpos.X/10 + visibleBoardW)
-		y := int(mpos.Y/10 + visibleBoardH)
-
-		if x < visibleBoardW || x >= game.GridMaxX-visibleBoardW || y < visibleBoardH || y >= game.GridMaxY-visibleBoardH {
-			// do nothing
-		} else {
-			cells[x][y].Alive = !cells[x][y].Alive
-		}
+		changeCell(cells, win.MousePosition(), true)
+	} else if win.JustPressed(pixelgl.MouseButtonRight) {
+		changeCell(cells, win.MousePosition(), false)
 	}
 }
 
@@ -106,4 +99,15 @@ func (b *Board) Draw(t pixel.Target, cells game.CellGrid) {
 func draw(batch *pixel.Batch, tile *pixel.Sprite, x, y int) {
 	loc := pixel.V(tile.Frame().W()/2+tile.Frame().W()*float64(x), tile.Frame().H()/2+tile.Frame().H()*float64(y))
 	tile.Draw(batch, pixel.IM.Moved(loc))
+}
+
+func changeCell(cells game.CellGrid, pos pixel.Vec, alive bool) {
+	x := int(pos.X/10 + visibleBoardW)
+	y := int(pos.Y/10 + visibleBoardH)
+
+	if x < visibleBoardW || x >= game.GridMaxX-visibleBoardW || y < visibleBoardH || y >= game.GridMaxY-visibleBoardH {
+		// do nothing
+	} else {
+		cells[x][y].Alive = alive
+	}
 }
