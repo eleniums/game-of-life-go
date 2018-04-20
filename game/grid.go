@@ -50,16 +50,23 @@ func (c CellGrid) IsAlive(x, y int) bool {
 	return c[x][y].Alive
 }
 
-func (c CellGrid) CountNeighbors(x, y int) int {
-	count := 0
-
+func (c CellGrid) CountNeighbors(x, y int) (count, cross, plus, circle, dot int) {
 	for i := x - 1; i <= x+1; i++ {
 		for j := y - 1; j <= y+1; j++ {
 			if c.IsAlive(i, j) && !(i == x && j == y) {
-				count++
+				switch c[i][j].Type {
+				case CellType_Cross:
+					cross++
+				case CellType_Plus:
+					plus++
+				case CellType_Circle:
+					circle++
+				case CellType_Dot:
+					dot++
+				}
 			}
 		}
 	}
 
-	return count
+	return cross + plus + circle + dot, cross, plus, circle, dot
 }
