@@ -88,6 +88,7 @@ func (m *Manager) Load(path string) error {
 
 	m.cells = cells
 	m.buffer.Clear()
+	m.memory = m.cells.Copy()
 
 	return nil
 }
