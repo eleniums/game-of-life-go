@@ -16,6 +16,7 @@ type Scene struct {
 	storeButton *ui.Button
 	resetButton *ui.Button
 	clearButton *ui.Button
+	saveButton  *ui.Button
 	bounds      pixel.Rect
 }
 
@@ -35,18 +36,24 @@ func New() *Scene {
 		manager.Clear()
 	})
 
+	saveButton := ui.NewButton(pixel.V(1000, 200), "SAVE", func(b *ui.Button) {
+		//manager.Save()
+	})
+
 	startButton := ui.NewButton(pixel.V(1000, 600), "START", func(b *ui.Button) {
 		if !manager.Running() {
 			b.SetText("STOP")
 			storeButton.SetActive(false)
 			resetButton.SetActive(false)
 			clearButton.SetActive(false)
+			saveButton.SetActive(false)
 			manager.Start()
 		} else {
 			b.SetText("START")
 			storeButton.SetActive(true)
 			resetButton.SetActive(true)
 			clearButton.SetActive(true)
+			saveButton.SetActive(true)
 			manager.Stop()
 		}
 	})
@@ -58,6 +65,7 @@ func New() *Scene {
 		storeButton: storeButton,
 		resetButton: resetButton,
 		clearButton: clearButton,
+		saveButton:  saveButton,
 	}
 }
 
@@ -69,6 +77,7 @@ func (s *Scene) Update(win *pixelgl.Window) {
 		s.storeButton.SetPosition(pixel.V(s.bounds.Max.X-150-s.storeButton.Size().W()/2, s.bounds.Max.Y-460))
 		s.resetButton.SetPosition(pixel.V(s.bounds.Max.X-150-s.resetButton.Size().W()/2, s.bounds.Max.Y-560))
 		s.clearButton.SetPosition(pixel.V(s.bounds.Max.X-150-s.clearButton.Size().W()/2, s.bounds.Max.Y-660))
+		s.saveButton.SetPosition(pixel.V(s.bounds.Max.X-150-s.saveButton.Size().W()/2, s.bounds.Max.Y-760))
 	}
 
 	s.board.Update(win, s.manager.Cells())
@@ -77,6 +86,7 @@ func (s *Scene) Update(win *pixelgl.Window) {
 	s.storeButton.Update(win)
 	s.resetButton.Update(win)
 	s.clearButton.Update(win)
+	s.saveButton.Update(win)
 
 	s.manager.Update()
 }
@@ -90,6 +100,7 @@ func (s *Scene) Draw(win *pixelgl.Window) {
 	s.storeButton.Draw(win)
 	s.resetButton.Draw(win)
 	s.clearButton.Draw(win)
+	s.saveButton.Draw(win)
 
 	// board
 	s.board.Draw(win, s.manager.Cells())
