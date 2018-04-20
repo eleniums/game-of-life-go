@@ -95,8 +95,27 @@ func (m *Manager) Running() bool {
 	return m.running
 }
 
+type storage struct {
+	Cell *Cell
+	X    int
+	Y    int
+}
+
 func save(cells CellGrid, path string) error {
-	data, err := json.Marshal(cells)
+	compact := []*storage{}
+	for x := range cells {
+		for y := range cells[x] {
+			if cells[x][y].Alive {
+				compact = append(compact, &storage{
+					Cell: cells[x][y],
+					X:    x,
+					Y:    y,
+				})
+			}
+		}
+	}
+
+	data, err := json.Marshal(compact)
 	if err != nil {
 		return err
 	}
@@ -112,8 +131,13 @@ func load(path string) (CellGrid, error) {
 		return nil, err
 	}
 
-	var cells CellGrid
-	err = json.Unmarshal(data, &cells)
+	var compact []*storage
+	err = json.Unmarshal(data, &compact)
+
+	cells := NewCellGrid()
+	for _, v := range compact {
+		cells[v.X][v.Y] = v.Cell
+	}
 
 	return cells, err
 }
