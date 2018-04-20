@@ -5,7 +5,7 @@ import (
 )
 
 var (
-	Interval = 1000
+	Interval = 100
 )
 
 type Manager struct {

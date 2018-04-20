@@ -20,7 +20,7 @@ func main() {
 }
 
 func run() {
-	interval := flag.Int("interval", 1000, "simulation update interval in ms")
+	interval := flag.Int("interval", 100, "simulation update interval in ms")
 	resizable := flag.Bool("resizable", false, "allow resizing of the main window")
 	flag.Parse()
 
