@@ -1,5 +1,7 @@
 package game
 
+import "time"
+
 var (
 	Interval = 1000
 )
@@ -8,6 +10,7 @@ type Manager struct {
 	cells   CellGrid
 	buffer  CellGrid
 	running bool
+	ticker  *time.Ticker
 }
 
 func NewManager() *Manager {
@@ -19,25 +22,33 @@ func NewManager() *Manager {
 }
 
 func (m *Manager) Update() {
-	// iterate over grid and apply rules
-	for x := range m.cells {
-		for y := range m.cells[x] {
-			neighbors := countNeighbors(m.cells, x, y)
-			m.buffer[x][y].Alive = applyRules(m.cells[x][y].Alive, neighbors)
+	if m.running {
+		select {
+		case <-m.ticker.C:
+			// iterate over grid and apply rules
+			for x := range m.cells {
+				for y := range m.cells[x] {
+					neighbors := countNeighbors(m.cells, x, y)
+					m.buffer[x][y].Alive = applyRules(m.cells[x][y].Alive, neighbors)
+				}
+			}
+
+			// swap active cells with buffer
+			temp := m.cells
+			m.cells = m.buffer
+			m.buffer = temp
+		default:
 		}
 	}
-
-	// swap active cells with buffer
-	temp := m.cells
-	m.cells = m.buffer
-	m.buffer = temp
 }
 
 func (m *Manager) Start() {
 	m.running = true
+	m.ticker = time.NewTicker(time.Duration(Interval) * time.Millisecond)
 }
 
 func (m *Manager) Stop() {
+	m.ticker.Stop()
 	m.running = false
 }
 

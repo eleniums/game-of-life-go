@@ -59,6 +59,8 @@ func (s *Scene) Update(win *pixelgl.Window) {
 	s.storeButton.Update(win)
 	s.resetButton.Update(win)
 	s.clearButton.Update(win)
+
+	s.manager.Update()
 }
 
 func (s *Scene) Draw(win *pixelgl.Window) {
