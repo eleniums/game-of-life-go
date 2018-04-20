@@ -1,8 +1,8 @@
 package game
 
 const (
-	GridMaxX = 96
-	GridMaxY = 96
+	GridMaxX = 288
+	GridMaxY = 288
 )
 
 type CellGrid [][]*Cell

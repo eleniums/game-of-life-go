@@ -13,6 +13,9 @@ import (
 const (
 	boardMaxX = 6
 	boardMaxY = 6
+
+	visibleBoardW = 96
+	visibleBoardH = 96
 )
 
 type Board struct {
@@ -45,10 +48,10 @@ func (b *Board) Update(win *pixelgl.Window, cells game.CellGrid) {
 	if win.JustPressed(pixelgl.MouseButtonLeft) {
 		mpos := win.MousePosition()
 
-		x := int(mpos.X / 10)
-		y := int(mpos.Y / 10)
+		x := int(mpos.X/10 + visibleBoardW)
+		y := int(mpos.Y/10 + visibleBoardH)
 
-		if x < 0 || x >= game.GridMaxX || y < 0 || y >= game.GridMaxY {
+		if x < visibleBoardW || x >= game.GridMaxX-visibleBoardW || y < visibleBoardH || y >= game.GridMaxY-visibleBoardH {
 			// do nothing
 		} else {
 			cells[x][y].Alive = !cells[x][y].Alive
@@ -78,18 +81,18 @@ func (b *Board) Draw(t pixel.Target, cells game.CellGrid) {
 	}
 
 	// draw cells to batch
-	for x := range cells {
-		for y := range cells[x] {
+	for x := visibleBoardW; x < game.GridMaxX-visibleBoardW; x++ {
+		for y := visibleBoardH; y < game.GridMaxY-visibleBoardH; y++ {
 			if cells[x][y].Alive {
 				switch cells[x][y].Type {
 				case 0:
-					draw(b.cellBatch, sprites.Cell1, x, y)
+					draw(b.cellBatch, sprites.Cell1, x-visibleBoardW, y-visibleBoardH)
 				case 1:
-					draw(b.cellBatch, sprites.Cell2, x, y)
+					draw(b.cellBatch, sprites.Cell2, x-visibleBoardW, y-visibleBoardH)
 				case 2:
-					draw(b.cellBatch, sprites.Cell3, x, y)
+					draw(b.cellBatch, sprites.Cell3, x-visibleBoardW, y-visibleBoardH)
 				case 3:
-					draw(b.cellBatch, sprites.Cell4, x, y)
+					draw(b.cellBatch, sprites.Cell4, x-visibleBoardW, y-visibleBoardH)
 				default:
 				}
 			}
