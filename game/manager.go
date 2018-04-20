@@ -54,6 +54,11 @@ func (m *Manager) Stop() {
 	m.running = false
 }
 
+func (m *Manager) Clear() {
+	m.cells.Clear()
+	m.buffer.Clear()
+}
+
 func (m *Manager) Cells() CellGrid {
 	return m.cells
 }

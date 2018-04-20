@@ -22,6 +22,14 @@ func NewCellGrid(xdim, ydim int) CellGrid {
 	return grid
 }
 
+func (c CellGrid) Clear() {
+	for x := range c {
+		for y := range c[x] {
+			c[x][y].Reset()
+		}
+	}
+}
+
 func (c CellGrid) IsAlive(x, y int) bool {
 	if x < 0 || x >= GridMaxX || y < 0 || y >= GridMaxY {
 		return false
