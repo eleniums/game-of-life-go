@@ -18,6 +18,10 @@ const (
 	visibleBoardH = 96
 )
 
+var (
+	SetCellType = game.CellType_Cross
+)
+
 type Board struct {
 	grassGrid  [][]int
 	grassBatch *pixel.Batch
@@ -46,9 +50,9 @@ func NewBoard() *Board {
 
 func (b *Board) Update(win *pixelgl.Window, cells game.CellGrid) {
 	if win.JustPressed(pixelgl.MouseButtonLeft) {
-		changeCell(cells, win.MousePosition(), true)
+		changeCell(cells, win.MousePosition(), true, SetCellType)
 	} else if win.JustPressed(pixelgl.MouseButtonRight) {
-		changeCell(cells, win.MousePosition(), false)
+		changeCell(cells, win.MousePosition(), false, SetCellType)
 	}
 }
 
@@ -101,7 +105,7 @@ func draw(batch *pixel.Batch, tile *pixel.Sprite, x, y int) {
 	tile.Draw(batch, pixel.IM.Moved(loc))
 }
 
-func changeCell(cells game.CellGrid, pos pixel.Vec, alive bool) {
+func changeCell(cells game.CellGrid, pos pixel.Vec, alive bool, cellType game.CellType) {
 	x := int(pos.X/10 + visibleBoardW)
 	y := int(pos.Y/10 + visibleBoardH)
 
@@ -109,5 +113,6 @@ func changeCell(cells game.CellGrid, pos pixel.Vec, alive bool) {
 		// do nothing
 	} else {
 		cells[x][y].Alive = alive
+		cells[x][y].Type = cellType
 	}
 }

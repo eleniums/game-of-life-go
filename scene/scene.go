@@ -25,6 +25,10 @@ type Scene struct {
 	resetButton *ui.Button
 	clearButton *ui.Button
 	saveButton  *ui.Button
+	cell1Select *ui.Selector
+	cell2Select *ui.Selector
+	cell3Select *ui.Selector
+	cell4Select *ui.Selector
 	bounds      pixel.Rect
 }
 
@@ -68,6 +72,39 @@ func New() *Scene {
 		}
 	})
 
+	scene.cell1Select = ui.NewSelector(pixel.V(1050, 120), sprites.Cell1, func(s *ui.Selector) {
+		scene.cell2Select.Selected(false)
+		scene.cell3Select.Selected(false)
+		scene.cell4Select.Selected(false)
+
+		ui.SetCellType = game.CellType_Cross
+	})
+	scene.cell1Select.Selected(true)
+
+	scene.cell2Select = ui.NewSelector(pixel.V(1120, 120), sprites.Cell2, func(s *ui.Selector) {
+		scene.cell1Select.Selected(false)
+		scene.cell3Select.Selected(false)
+		scene.cell4Select.Selected(false)
+
+		ui.SetCellType = game.CellType_Plus
+	})
+
+	scene.cell3Select = ui.NewSelector(pixel.V(1050, 50), sprites.Cell3, func(s *ui.Selector) {
+		scene.cell1Select.Selected(false)
+		scene.cell2Select.Selected(false)
+		scene.cell4Select.Selected(false)
+
+		ui.SetCellType = game.CellType_Circle
+	})
+
+	scene.cell4Select = ui.NewSelector(pixel.V(1120, 50), sprites.Cell4, func(s *ui.Selector) {
+		scene.cell1Select.Selected(false)
+		scene.cell2Select.Selected(false)
+		scene.cell3Select.Selected(false)
+
+		ui.SetCellType = game.CellType_Dot
+	})
+
 	return scene
 }
 
@@ -90,6 +127,11 @@ func (s *Scene) Update(win *pixelgl.Window) {
 	s.clearButton.Update(win)
 	s.saveButton.Update(win)
 
+	s.cell1Select.Update(win)
+	s.cell2Select.Update(win)
+	s.cell3Select.Update(win)
+	s.cell4Select.Update(win)
+
 	s.manager.Update()
 }
 
@@ -103,6 +145,11 @@ func (s *Scene) Draw(win *pixelgl.Window) {
 	s.resetButton.Draw(win)
 	s.clearButton.Draw(win)
 	s.saveButton.Draw(win)
+
+	s.cell1Select.Draw(win)
+	s.cell2Select.Draw(win)
+	s.cell3Select.Draw(win)
+	s.cell4Select.Draw(win)
 
 	// board
 	s.board.Draw(win, s.manager.Cells())
