@@ -119,7 +119,9 @@ func (s *Scene) Update(win *pixelgl.Window) {
 		s.saveButton.SetPosition(pixel.V(s.bounds.Max.X-150-s.saveButton.Size().W()/2, s.bounds.Max.Y-760))
 	}
 
-	s.board.Update(win, s.manager.Cells())
+	if !s.manager.Running() {
+		s.board.Update(win, s.manager.Cells())
+	}
 
 	s.startButton.Update(win)
 	s.storeButton.Update(win)
