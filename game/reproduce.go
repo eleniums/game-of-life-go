@@ -51,25 +51,26 @@ func reproduceMajorityWins(cross, plus, circle, dot int) CellType {
 }
 
 func reproduceRandomPercentage(cross, plus, circle, dot int) CellType {
-	var types []CellType
+	var types [3]CellType
+	index := 0
 
 	for i := 0; i < cross; i++ {
-		types = append(types, CellType_Cross)
+		types[index] = CellType_Cross
+		index++
 	}
 	for i := 0; i < plus; i++ {
-		types = append(types, CellType_Plus)
+		types[index] = CellType_Plus
+		index++
 	}
 	for i := 0; i < circle; i++ {
-		types = append(types, CellType_Circle)
+		types[index] = CellType_Circle
+		index++
 	}
 	for i := 0; i < dot; i++ {
-		types = append(types, CellType_Dot)
+		types[index] = CellType_Dot
+		index++
 	}
 
-	if len(types) == 3 {
-		result := rand.Intn(3)
-		return types[result]
-	}
-
-	return CellType_Cross
+	result := rand.Intn(3)
+	return types[result]
 }

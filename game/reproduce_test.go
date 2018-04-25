@@ -5,33 +5,25 @@ import (
 )
 
 func Benchmark_reproduceMajorityWins_BestCase(b *testing.B) {
-	typeCounts := []int{3, 0, 0, 0}
-
 	for i := 0; i < b.N; i++ {
-		reproduceMajorityWins(typeCounts)
+		reproduceMajorityWins(3, 0, 0, 0)
 	}
 }
 
 func Benchmark_reproduceMajorityWins_WorstCase(b *testing.B) {
-	typeCounts := []int{1, 1, 1, 0}
-
 	for i := 0; i < b.N; i++ {
-		reproduceMajorityWins(typeCounts)
+		reproduceMajorityWins(1, 1, 1, 0)
 	}
 }
 
 func Benchmark_reproduceRandomPercentage_BestCase(b *testing.B) {
-	typeCounts := []int{3, 0, 0, 0}
-
 	for i := 0; i < b.N; i++ {
-		reproduceRandomPercentage(typeCounts)
+		reproduceRandomPercentage(3, 0, 0, 0)
 	}
 }
 
 func Benchmark_reproduceRandomPercentage_WorstCase(b *testing.B) {
-	typeCounts := []int{1, 1, 1, 0}
-
 	for i := 0; i < b.N; i++ {
-		reproduceRandomPercentage(typeCounts)
+		reproduceRandomPercentage(1, 1, 1, 0)
 	}
 }

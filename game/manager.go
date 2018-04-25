@@ -35,7 +35,7 @@ func (m *Manager) Update() {
 					neighbors, cross, plus, circle, dot := m.cells.CountNeighbors(x, y)
 					if m.cells[x][y].Alive {
 						m.buffer[x][y].Type = m.cells[x][y].Type
-					} else {
+					} else if neighbors == 3 {
 						m.buffer[x][y].Type = determineType(cross, plus, circle, dot)
 					}
 					m.buffer[x][y].Alive = applyRules(m.cells[x][y].Alive, neighbors)
