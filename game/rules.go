@@ -6,9 +6,5 @@ package game
 // - If there are more than 3 living cells surrounding a living cell, it will die, as if by overpopulation.
 // - If there are exactly 3 living cells surrounding a dead cell, it will become alive, as if by reproduction.
 func applyRules(alive bool, neighbors int) bool {
-	if alive {
-		return neighbors >= 2 && neighbors <= 3
-	} else {
-		return neighbors == 3
-	}
+	return neighbors == 3 || neighbors == 2 && alive
 }
