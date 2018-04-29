@@ -29,23 +29,8 @@ func (m *Manager) Update() {
 	if m.running {
 		select {
 		case <-m.ticker.C:
-			// iterate over grid and apply rules
-			for x := range m.cells {
-				for y := range m.cells[x] {
-					neighbors, cross, plus, circle, dot := m.cells.CountNeighbors(x, y)
-					if m.cells[x][y].Alive {
-						m.buffer[x][y].Type = m.cells[x][y].Type
-					} else if neighbors == 3 {
-						m.buffer[x][y].Type = determineType(cross, plus, circle, dot)
-					}
-					m.buffer[x][y].Alive = applyRules(m.cells[x][y].Alive, neighbors)
-				}
-			}
-
-			// swap active cells with buffer
-			temp := m.cells
-			m.cells = m.buffer
-			m.buffer = temp
+			m.updateBuffer()
+			m.swapBuffer()
 		default:
 		}
 	}
@@ -97,4 +82,26 @@ func (m *Manager) Cells() CellGrid {
 
 func (m *Manager) Running() bool {
 	return m.running
+}
+
+// updateBuffer will iterate over the grid and apply rules.
+func (m *Manager) updateBuffer() {
+	for x := range m.cells {
+		for y := range m.cells[x] {
+			neighbors, cross, plus, circle, dot := m.cells.CountNeighbors(x, y)
+			if m.cells[x][y].Alive {
+				m.buffer[x][y].Type = m.cells[x][y].Type
+			} else if neighbors == 3 {
+				m.buffer[x][y].Type = determineType(cross, plus, circle, dot)
+			}
+			m.buffer[x][y].Alive = applyRules(m.cells[x][y].Alive, neighbors)
+		}
+	}
+}
+
+// swapBuffer will swap active cells with buffer
+func (m *Manager) swapBuffer() {
+	temp := m.cells
+	m.cells = m.buffer
+	m.buffer = temp
 }
