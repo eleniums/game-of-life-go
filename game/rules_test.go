@@ -3,42 +3,31 @@ package game
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	assert "github.com/stretchr/testify/require"
 )
 
-func Test_applyRules_Underpopulation(t *testing.T) {
-	alive := applyRules(true, 1)
-	assert.False(t, alive)
-}
+func Test_applyRules(t *testing.T) {
+	testCases := []struct {
+		name      string
+		alive     bool
+		neighbors int
+		want      bool
+	}{
+		{"Underpopulation", true, 1, false},
+		{"Overpopulation", true, 4, false},
+		{"Reproduction", false, 3, true},
+		{"Stay Alive With 2", true, 2, true},
+		{"Stay Alive With 3", true, 3, true},
+		{"Stay Dead With Less Than 3", false, 2, false},
+		{"Stay Dead With Greater Than 3", false, 4, false},
+	}
 
-func Test_applyRules_Overpopulation(t *testing.T) {
-	alive := applyRules(true, 4)
-	assert.False(t, alive)
-}
-
-func Test_applyRules_Reproduction(t *testing.T) {
-	alive := applyRules(false, 3)
-	assert.True(t, alive)
-}
-
-func Test_applyRules_StayAlive_2(t *testing.T) {
-	alive := applyRules(true, 2)
-	assert.True(t, alive)
-}
-
-func Test_applyRules_StayAlive_3(t *testing.T) {
-	alive := applyRules(true, 3)
-	assert.True(t, alive)
-}
-
-func Test_applyRules_StayDead_LessThan3(t *testing.T) {
-	alive := applyRules(false, 2)
-	assert.False(t, alive)
-}
-
-func Test_applyRules_StayDead_GreaterThan3(t *testing.T) {
-	alive := applyRules(false, 4)
-	assert.False(t, alive)
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			alive := applyRules(tc.alive, tc.neighbors)
+			assert.Equal(t, tc.want, alive)
+		})
+	}
 }
 
 func Benchmark_applyRules_Underpopulation(b *testing.B) {
