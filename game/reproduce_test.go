@@ -60,26 +60,44 @@ func Test_reproduceRandomPercentage(t *testing.T) {
 	}
 }
 
-func Benchmark_reproduceMajorityWins_BestCase(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		reproduceMajorityWins(3, 0, 0, 0)
+func Benchmark_reproduceMajorityWins(b *testing.B) {
+	benchmarks := []struct {
+		name   string
+		cross  int
+		plus   int
+		circle int
+		dot    int
+	}{
+		{"Best Case", 3, 0, 0, 0},
+		{"Worst Case", 1, 1, 1, 0},
+	}
+
+	for _, bm := range benchmarks {
+		b.Run(bm.name, func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				reproduceMajorityWins(bm.cross, bm.plus, bm.circle, bm.dot)
+			}
+		})
 	}
 }
 
-func Benchmark_reproduceMajorityWins_WorstCase(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		reproduceMajorityWins(1, 1, 1, 0)
+func Benchmark_reproduceRandomPercentage(b *testing.B) {
+	benchmarks := []struct {
+		name   string
+		cross  int
+		plus   int
+		circle int
+		dot    int
+	}{
+		{"Best Case", 3, 0, 0, 0},
+		{"Worst Case", 1, 1, 1, 0},
 	}
-}
 
-func Benchmark_reproduceRandomPercentage_BestCase(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		reproduceRandomPercentage(3, 0, 0, 0)
-	}
-}
-
-func Benchmark_reproduceRandomPercentage_WorstCase(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		reproduceRandomPercentage(1, 1, 1, 0)
+	for _, bm := range benchmarks {
+		b.Run(bm.name, func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				reproduceRandomPercentage(bm.cross, bm.plus, bm.circle, bm.dot)
+			}
+		})
 	}
 }
