@@ -14,40 +14,52 @@ func Benchmark_Manager_swapBuffer(b *testing.B) {
 	}
 }
 
-func Benchmark_Manager_updateBuffer_AverageCase(b *testing.B) {
-	manager := NewManager()
-	cells := manager.Cells()
+func Benchmark_Manager_updateBuffer(b *testing.B) {
+	b.Run("Best Case", func(b *testing.B) {
+		manager := NewManager()
 
-	for x := range cells {
-		if x%2 == 0 {
+		b.ResetTimer()
+
+		for i := 0; i < b.N; i++ {
+			manager.updateBuffer()
+		}
+	})
+
+	b.Run("Average Case", func(b *testing.B) {
+		manager := NewManager()
+		cells := manager.Cells()
+
+		for x := range cells {
+			if x%2 == 0 {
+				for y := range cells[x] {
+					cells[x][y].Alive = true
+					cells[x][y].Type = CellType(y % 4)
+				}
+			}
+		}
+
+		b.ResetTimer()
+
+		for i := 0; i < b.N; i++ {
+			manager.updateBuffer()
+		}
+	})
+
+	b.Run("Worst Case", func(b *testing.B) {
+		manager := NewManager()
+		cells := manager.Cells()
+
+		for x := range cells {
 			for y := range cells[x] {
 				cells[x][y].Alive = true
 				cells[x][y].Type = CellType(y % 4)
 			}
 		}
-	}
 
-	b.ResetTimer()
+		b.ResetTimer()
 
-	for i := 0; i < b.N; i++ {
-		manager.updateBuffer()
-	}
-}
-
-func Benchmark_Manager_updateBuffer_WorstCase(b *testing.B) {
-	manager := NewManager()
-	cells := manager.Cells()
-
-	for x := range cells {
-		for y := range cells[x] {
-			cells[x][y].Alive = true
-			cells[x][y].Type = CellType(y % 4)
+		for i := 0; i < b.N; i++ {
+			manager.updateBuffer()
 		}
-	}
-
-	b.ResetTimer()
-
-	for i := 0; i < b.N; i++ {
-		manager.updateBuffer()
-	}
+	})
 }
