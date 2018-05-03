@@ -1,6 +1,6 @@
 # game-of-life-go
 
-An adaptation of [Conway's Game of Life](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life) created with Go for a hackathon at work.
+An adaptation of [Conway's Game of Life](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life) created with Go for a hackathon at work. To see the code as it was when the hackathon finished, see [Release 1.0.0](https://github.com/eleniums/game-of-life-go/releases/tag/v1.0.0).
 
 ## Installation
 
