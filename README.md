@@ -12,7 +12,7 @@ dep ensure
 ## Run
 
 ```
-go run main.go
+go run ./cmd/game/main.go
 ```
 
 ## Prerequisites
