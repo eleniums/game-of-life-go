@@ -22,32 +22,32 @@ func determineType(cross, plus, circle, dot int) CellType {
 	case ReproduceType_RandomPercentage:
 		return reproduceRandomPercentage(cross, plus, circle, dot)
 	default:
-		return CellType_Cross
+		return CellTypeCross
 	}
 }
 
 func reproduceMajorityWins(cross, plus, circle, dot int) CellType {
 	if cross > 1 {
-		return CellType_Cross
+		return CellTypeCross
 	} else if plus > 1 {
-		return CellType_Plus
+		return CellTypePlus
 	} else if circle > 1 {
-		return CellType_Circle
+		return CellTypeCircle
 	} else if dot > 1 {
-		return CellType_Dot
+		return CellTypeDot
 	}
 
 	if cross <= 0 {
-		return CellType_Cross
+		return CellTypeCross
 	} else if plus <= 0 {
-		return CellType_Plus
+		return CellTypePlus
 	} else if circle <= 0 {
-		return CellType_Circle
+		return CellTypeCircle
 	} else if dot <= 0 {
-		return CellType_Dot
+		return CellTypeDot
 	}
 
-	return CellType_Cross
+	return CellTypeCross
 }
 
 func reproduceRandomPercentage(cross, plus, circle, dot int) CellType {
@@ -55,19 +55,19 @@ func reproduceRandomPercentage(cross, plus, circle, dot int) CellType {
 	index := 0
 
 	for i := 0; i < cross; i++ {
-		types[index] = CellType_Cross
+		types[index] = CellTypeCross
 		index++
 	}
 	for i := 0; i < plus; i++ {
-		types[index] = CellType_Plus
+		types[index] = CellTypePlus
 		index++
 	}
 	for i := 0; i < circle; i++ {
-		types[index] = CellType_Circle
+		types[index] = CellTypeCircle
 		index++
 	}
 	for i := 0; i < dot; i++ {
-		types[index] = CellType_Dot
+		types[index] = CellTypeDot
 		index++
 	}
 

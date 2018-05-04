@@ -77,7 +77,7 @@ func New() *Scene {
 		scene.cell3Select.Selected(false)
 		scene.cell4Select.Selected(false)
 
-		ui.SetCellType = game.CellType_Cross
+		ui.SetCellType = game.CellTypeCross
 	})
 	scene.cell1Select.Selected(true)
 
@@ -86,7 +86,7 @@ func New() *Scene {
 		scene.cell3Select.Selected(false)
 		scene.cell4Select.Selected(false)
 
-		ui.SetCellType = game.CellType_Plus
+		ui.SetCellType = game.CellTypePlus
 	})
 
 	scene.cell3Select = ui.NewSelector(pixel.V(1050, 50), sprites.Cell3, func(s *ui.Selector) {
@@ -94,7 +94,7 @@ func New() *Scene {
 		scene.cell2Select.Selected(false)
 		scene.cell4Select.Selected(false)
 
-		ui.SetCellType = game.CellType_Circle
+		ui.SetCellType = game.CellTypeCircle
 	})
 
 	scene.cell4Select = ui.NewSelector(pixel.V(1120, 50), sprites.Cell4, func(s *ui.Selector) {
@@ -102,7 +102,7 @@ func New() *Scene {
 		scene.cell2Select.Selected(false)
 		scene.cell3Select.Selected(false)
 
-		ui.SetCellType = game.CellType_Dot
+		ui.SetCellType = game.CellTypeDot
 	})
 
 	return scene

@@ -19,7 +19,7 @@ const (
 )
 
 var (
-	SetCellType = game.CellType_Cross
+	SetCellType = game.CellTypeCross
 )
 
 type Board struct {

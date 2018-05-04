@@ -55,13 +55,13 @@ func (c CellGrid) CountNeighbors(x, y int) (count, cross, plus, circle, dot int)
 		for j := y - 1; j <= y+1; j++ {
 			if c.IsAlive(i, j) && !(i == x && j == y) {
 				switch c[i][j].Type {
-				case CellType_Cross:
+				case CellTypeCross:
 					cross++
-				case CellType_Plus:
+				case CellTypePlus:
 					plus++
-				case CellType_Circle:
+				case CellTypeCircle:
 					circle++
-				case CellType_Dot:
+				case CellTypeDot:
 					dot++
 				}
 			}

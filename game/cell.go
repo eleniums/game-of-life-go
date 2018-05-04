@@ -3,10 +3,10 @@ package game
 type CellType int
 
 const (
-	CellType_Cross CellType = iota
-	CellType_Plus
-	CellType_Circle
-	CellType_Dot
+	CellTypeCross CellType = iota
+	CellTypePlus
+	CellTypeCircle
+	CellTypeDot
 )
 
 type Cell struct {
@@ -16,7 +16,7 @@ type Cell struct {
 
 func (c *Cell) Clear() {
 	c.Alive = false
-	c.Type = CellType_Cross
+	c.Type = CellTypeCross
 }
 
 func (c *Cell) Copy() *Cell {
