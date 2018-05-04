@@ -1,6 +1,10 @@
 # game-of-life-go
 
-An adaptation of [Conway's Game of Life](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life) created with Go for a hackathon at work. To see the code as it was when the hackathon finished, see [Release 1.0.0](https://github.com/eleniums/game-of-life-go/releases/tag/v1.0.0).
+[![Go Report Card](https://goreportcard.com/badge/github.com/eleniums/game-of-life-go)](https://goreportcard.com/report/github.com/eleniums/game-of-life-go) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/eleniums/game-of-life-go/blob/master/LICENSE) [![GoDoc](https://godoc.org/github.com/eleniums/game-of-life-go?status.svg)](https://godoc.org/github.com/eleniums/game-of-life-go)
+
+An adaptation of [Conway's Game of Life](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life) created with Go for a hackathon at work.
+
+*To see the code as it was when the hackathon finished, see [Release 1.0.0](https://github.com/eleniums/game-of-life-go/releases/tag/v1.0.0).*
 
 ## Installation
 
