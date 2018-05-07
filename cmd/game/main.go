@@ -64,11 +64,11 @@ func run() {
 	// set reproduction type
 	switch *reproduce {
 	case "majority-wins":
-		game.ReproduceMethod = game.ReproduceType_MajorityWins
+		game.ReproduceMethod = game.ReproduceTypeMajorityWins
 	case "random-percentage":
-		game.ReproduceMethod = game.ReproduceType_RandomPercentage
+		game.ReproduceMethod = game.ReproduceTypeRandomPercentage
 	default:
-		game.ReproduceMethod = game.ReproduceType_MajorityWins
+		game.ReproduceMethod = game.ReproduceTypeMajorityWins
 	}
 
 	frames := 0

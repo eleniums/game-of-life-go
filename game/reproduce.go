@@ -4,28 +4,35 @@ import (
 	"math/rand"
 )
 
+// ReproduceType is the type of logic used to determine cell type when it becomes alive.
 type ReproduceType int
 
 const (
-	ReproduceType_MajorityWins CellType = iota
-	ReproduceType_RandomPercentage
+	// ReproduceTypeMajorityWins will determine cell type based on a majority of neighbors.
+	ReproduceTypeMajorityWins CellType = iota
+
+	// ReproduceTypeRandomPercentage will determine cell type by randomly picking one of the neighbors.
+	ReproduceTypeRandomPercentage
 )
 
 var (
-	ReproduceMethod = ReproduceType_MajorityWins
+	// ReproduceMethod is the method of reproduction used when a cell becomes alive.
+	ReproduceMethod = ReproduceTypeMajorityWins
 )
 
+// determineType will determine the cell type based on the neighbors, using the ReproduceMethod.
 func determineType(cross, plus, circle, dot int) CellType {
 	switch ReproduceMethod {
-	case ReproduceType_MajorityWins:
+	case ReproduceTypeMajorityWins:
 		return reproduceMajorityWins(cross, plus, circle, dot)
-	case ReproduceType_RandomPercentage:
+	case ReproduceTypeRandomPercentage:
 		return reproduceRandomPercentage(cross, plus, circle, dot)
 	default:
 		return CellTypeCross
 	}
 }
 
+// reproduceMajorityWins will determine cell type based on a majority of neighbors.
 func reproduceMajorityWins(cross, plus, circle, dot int) CellType {
 	if cross > 1 {
 		return CellTypeCross
@@ -50,6 +57,7 @@ func reproduceMajorityWins(cross, plus, circle, dot int) CellType {
 	return CellTypeCross
 }
 
+// reproduceRandomPercentage will determine cell type by randomly picking one of the neighbors.
 func reproduceRandomPercentage(cross, plus, circle, dot int) CellType {
 	var types [3]CellType
 	index := 0
