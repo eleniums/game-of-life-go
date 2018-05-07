@@ -14,9 +14,11 @@ import (
 )
 
 const (
+	// PatternFolder is the folder where saved patterns are located.
 	PatternFolder = "testdata"
 )
 
+// Scene represents an entire scene in the game.
 type Scene struct {
 	manager     *game.Manager
 	board       *ui.Board
@@ -32,6 +34,7 @@ type Scene struct {
 	bounds      pixel.Rect
 }
 
+// New creates a new scene.
 func New() *Scene {
 	scene := &Scene{}
 
@@ -108,6 +111,7 @@ func New() *Scene {
 	return scene
 }
 
+// Update the scene.
 func (s *Scene) Update(win *pixelgl.Window) {
 	if s.bounds.W() != win.Bounds().W() || s.bounds.H() != win.Bounds().H() {
 		s.bounds = win.Bounds()
@@ -137,6 +141,7 @@ func (s *Scene) Update(win *pixelgl.Window) {
 	s.manager.Update()
 }
 
+// Draw the scene.
 func (s *Scene) Draw(win *pixelgl.Window) {
 	win.Clear(colornames.Black)
 
@@ -157,6 +162,7 @@ func (s *Scene) Draw(win *pixelgl.Window) {
 	s.board.Draw(win, s.manager.Cells())
 }
 
+// Save the scene to file.
 func (s *Scene) Save(pattern string) {
 	if _, err := os.Stat(PatternFolder); os.IsNotExist(err) {
 		err := os.Mkdir(PatternFolder, os.ModePerm)
@@ -172,6 +178,7 @@ func (s *Scene) Save(pattern string) {
 	}
 }
 
+// Load a pattern from file.
 func (s *Scene) Load(pattern string) {
 	err := s.manager.Load(fmt.Sprintf("%s/%s", PatternFolder, pattern))
 	if err != nil {
