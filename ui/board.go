@@ -11,23 +11,28 @@ import (
 )
 
 const (
+	// dimensions of grass tiles
 	boardMaxX = 6
 	boardMaxY = 6
 
+	// dimensions of visible board space
 	visibleBoardW = 96
 	visibleBoardH = 96
 )
 
 var (
+	// SetCellType is the type of cell to place when the grid is clicked.
 	SetCellType = game.CellTypeCross
 )
 
+// Board contains batches for drawing the grass and cells.
 type Board struct {
 	grassGrid  [][]int
 	grassBatch *pixel.Batch
 	cellBatch  *pixel.Batch
 }
 
+// NewBoard creates a new board.
 func NewBoard() *Board {
 	grassBatch := pixel.NewBatch(&pixel.TrianglesData{}, assets.GrassMap)
 	cellBatch := pixel.NewBatch(&pixel.TrianglesData{}, assets.CellMap)
@@ -48,6 +53,7 @@ func NewBoard() *Board {
 	}
 }
 
+// Update the board with any new mouse clicks.
 func (b *Board) Update(win *pixelgl.Window, cells game.CellGrid) {
 	if win.JustPressed(pixelgl.MouseButtonLeft) {
 		changeCell(cells, win.MousePosition(), true, SetCellType)
@@ -56,6 +62,7 @@ func (b *Board) Update(win *pixelgl.Window, cells game.CellGrid) {
 	}
 }
 
+// Draw the board to the screen.
 func (b *Board) Draw(t pixel.Target, cells game.CellGrid) {
 	b.grassBatch.Clear()
 	b.cellBatch.Clear()
@@ -100,11 +107,13 @@ func (b *Board) Draw(t pixel.Target, cells game.CellGrid) {
 	b.cellBatch.Draw(t)
 }
 
+// draw will draw a single cell to a batch at the given location.
 func draw(batch *pixel.Batch, tile *pixel.Sprite, x, y int) {
 	loc := pixel.V(tile.Frame().W()/2+tile.Frame().W()*float64(x), tile.Frame().H()/2+tile.Frame().H()*float64(y))
 	tile.Draw(batch, pixel.IM.Moved(loc))
 }
 
+// changeCell will switch a cell to a different state and type.
 func changeCell(cells game.CellGrid, pos pixel.Vec, alive bool, cellType game.CellType) {
 	x := int(pos.X/10 + visibleBoardW)
 	y := int(pos.Y/10 + visibleBoardH)
