@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"image"
 
+	// support png image format
 	_ "image/png"
 
 	"github.com/faiface/pixel"
