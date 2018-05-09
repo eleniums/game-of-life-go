@@ -61,7 +61,7 @@ func Test_CellGrid_CountNeighbors_Type_Cross(t *testing.T) {
 	for x := 4; x <= 6; x++ {
 		for y := 4; y <= 6; y++ {
 			cells[x][y].Alive = true
-			cells[x][y].Type = CellType_Cross
+			cells[x][y].Type = CellTypeCross
 		}
 	}
 
@@ -95,7 +95,7 @@ func Test_CellGrid_CountNeighbors_Type_Plus(t *testing.T) {
 	for x := 4; x <= 6; x++ {
 		for y := 4; y <= 6; y++ {
 			cells[x][y].Alive = true
-			cells[x][y].Type = CellType_Plus
+			cells[x][y].Type = CellTypePlus
 		}
 	}
 
@@ -129,7 +129,7 @@ func Test_CellGrid_CountNeighbors_Type_Circle(t *testing.T) {
 	for x := 4; x <= 6; x++ {
 		for y := 4; y <= 6; y++ {
 			cells[x][y].Alive = true
-			cells[x][y].Type = CellType_Circle
+			cells[x][y].Type = CellTypeCircle
 		}
 	}
 
@@ -163,7 +163,7 @@ func Test_CellGrid_CountNeighbors_Type_Dot(t *testing.T) {
 	for x := 4; x <= 6; x++ {
 		for y := 4; y <= 6; y++ {
 			cells[x][y].Alive = true
-			cells[x][y].Type = CellType_Dot
+			cells[x][y].Type = CellTypeDot
 		}
 	}
 

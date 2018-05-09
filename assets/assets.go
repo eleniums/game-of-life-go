@@ -8,13 +8,23 @@ import (
 )
 
 var (
-	Icon16x16  pixel.Picture
-	Title      pixel.Picture
-	CellMap    pixel.Picture
-	GrassMap   pixel.Picture
+	// Title is a picture of the main logo.
+	Title pixel.Picture
+
+	// Icon16x16 is a picture of the 16x16 icon.
+	Icon16x16 pixel.Picture
+
+	// CellMap is a picture of the cell sprite map.
+	CellMap pixel.Picture
+
+	// GrassMap is a picture of the grass tile sprite map.
+	GrassMap pixel.Picture
+
+	// PixelAtlas is the font atlas of the Pixel font.
 	PixelAtlas *text.Atlas
 )
 
+// Load all assets.
 func Load() error {
 	var err error
 

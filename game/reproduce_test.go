@@ -15,18 +15,18 @@ func Test_reproduceMajorityWins(t *testing.T) {
 		dot    int
 		want   CellType
 	}{
-		{"Cross Unanimous", 3, 0, 0, 0, CellType_Cross},
-		{"Cross Majority", 2, 1, 0, 0, CellType_Cross},
-		{"Cross Minority", 0, 1, 1, 1, CellType_Cross},
-		{"Plus Unanimous", 0, 3, 0, 0, CellType_Plus},
-		{"Plus Majority", 0, 2, 1, 0, CellType_Plus},
-		{"Plus Minority", 1, 0, 1, 1, CellType_Plus},
-		{"Circle Unanimous", 0, 0, 3, 0, CellType_Circle},
-		{"Circle Majority", 0, 0, 2, 1, CellType_Circle},
-		{"Circle Minority", 1, 1, 0, 1, CellType_Circle},
-		{"Dot Unanimous", 0, 0, 0, 3, CellType_Dot},
-		{"Dot Majority", 1, 0, 0, 2, CellType_Dot},
-		{"Dot Minority", 1, 1, 1, 0, CellType_Dot},
+		{"Cross Unanimous", 3, 0, 0, 0, CellTypeCross},
+		{"Cross Majority", 2, 1, 0, 0, CellTypeCross},
+		{"Cross Minority", 0, 1, 1, 1, CellTypeCross},
+		{"Plus Unanimous", 0, 3, 0, 0, CellTypePlus},
+		{"Plus Majority", 0, 2, 1, 0, CellTypePlus},
+		{"Plus Minority", 1, 0, 1, 1, CellTypePlus},
+		{"Circle Unanimous", 0, 0, 3, 0, CellTypeCircle},
+		{"Circle Majority", 0, 0, 2, 1, CellTypeCircle},
+		{"Circle Minority", 1, 1, 0, 1, CellTypeCircle},
+		{"Dot Unanimous", 0, 0, 0, 3, CellTypeDot},
+		{"Dot Majority", 1, 0, 0, 2, CellTypeDot},
+		{"Dot Minority", 1, 1, 1, 0, CellTypeDot},
 	}
 
 	for _, tc := range testCases {
@@ -46,10 +46,10 @@ func Test_reproduceRandomPercentage(t *testing.T) {
 		dot    int
 		want   CellType
 	}{
-		{"Cross Unanimous", 3, 0, 0, 0, CellType_Cross},
-		{"Plus Unanimous", 0, 3, 0, 0, CellType_Plus},
-		{"Circle Unanimous", 0, 0, 3, 0, CellType_Circle},
-		{"Dot Unanimous", 0, 0, 0, 3, CellType_Dot},
+		{"Cross Unanimous", 3, 0, 0, 0, CellTypeCross},
+		{"Plus Unanimous", 0, 3, 0, 0, CellTypePlus},
+		{"Circle Unanimous", 0, 0, 3, 0, CellTypeCircle},
+		{"Dot Unanimous", 0, 0, 0, 3, CellTypeDot},
 	}
 
 	for _, tc := range testCases {

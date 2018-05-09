@@ -8,6 +8,7 @@ import (
 	"github.com/faiface/pixel/pixelgl"
 )
 
+// Selector is used to show that something has been selected by drawing a rectangle behind it.
 type Selector struct {
 	position  pixel.Vec
 	size      pixel.Rect
@@ -18,6 +19,7 @@ type Selector struct {
 	action    func(selector *Selector)
 }
 
+// NewSelector creates a new selector.
 func NewSelector(position pixel.Vec, image *pixel.Sprite, action func(selector *Selector)) *Selector {
 	selector := &Selector{
 		position:  position,
@@ -32,10 +34,12 @@ func NewSelector(position pixel.Vec, image *pixel.Sprite, action func(selector *
 	return selector
 }
 
+// Selected sets the state as selected or not selected.
 func (s *Selector) Selected(selected bool) {
 	s.selected = selected
 }
 
+// Draw the selector to the screen.
 func (s *Selector) Draw(t pixel.Target) {
 	if s.selected {
 		s.fill.Draw(t)
@@ -45,6 +49,7 @@ func (s *Selector) Draw(t pixel.Target) {
 	s.image.Draw(t, pixel.IM.Moved(pos).Scaled(pos, 4))
 }
 
+// Update the selector and perform an action if it has been clicked.
 func (s *Selector) Update(win *pixelgl.Window) {
 	if win.JustPressed(pixelgl.MouseButtonLeft) {
 		mpos := win.MousePosition()

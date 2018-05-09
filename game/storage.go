@@ -5,12 +5,14 @@ import (
 	"io/ioutil"
 )
 
+// storage defines the type used to store a cell in a file.
 type storage struct {
 	Cell *Cell
 	X    int
 	Y    int
 }
 
+// save a grid to a file.
 func save(cells CellGrid, path string) error {
 	compact := []*storage{}
 	for x := range cells {
@@ -35,6 +37,7 @@ func save(cells CellGrid, path string) error {
 	return err
 }
 
+// load a pattern from a file to a grid.
 func load(path string) (CellGrid, error) {
 	data, err := ioutil.ReadFile(path)
 	if err != nil {

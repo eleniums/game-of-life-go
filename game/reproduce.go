@@ -4,70 +4,78 @@ import (
 	"math/rand"
 )
 
+// ReproduceType is the type of logic used to determine cell type when it becomes alive.
 type ReproduceType int
 
 const (
-	ReproduceType_MajorityWins CellType = iota
-	ReproduceType_RandomPercentage
+	// ReproduceTypeMajorityWins will determine cell type based on a majority of neighbors.
+	ReproduceTypeMajorityWins CellType = iota
+
+	// ReproduceTypeRandomPercentage will determine cell type by randomly picking one of the neighbors.
+	ReproduceTypeRandomPercentage
 )
 
 var (
-	ReproduceMethod = ReproduceType_MajorityWins
+	// ReproduceMethod is the method of reproduction used when a cell becomes alive.
+	ReproduceMethod = ReproduceTypeMajorityWins
 )
 
+// determineType will determine the cell type based on the neighbors, using the ReproduceMethod.
 func determineType(cross, plus, circle, dot int) CellType {
 	switch ReproduceMethod {
-	case ReproduceType_MajorityWins:
+	case ReproduceTypeMajorityWins:
 		return reproduceMajorityWins(cross, plus, circle, dot)
-	case ReproduceType_RandomPercentage:
+	case ReproduceTypeRandomPercentage:
 		return reproduceRandomPercentage(cross, plus, circle, dot)
 	default:
-		return CellType_Cross
+		return CellTypeCross
 	}
 }
 
+// reproduceMajorityWins will determine cell type based on a majority of neighbors.
 func reproduceMajorityWins(cross, plus, circle, dot int) CellType {
 	if cross > 1 {
-		return CellType_Cross
+		return CellTypeCross
 	} else if plus > 1 {
-		return CellType_Plus
+		return CellTypePlus
 	} else if circle > 1 {
-		return CellType_Circle
+		return CellTypeCircle
 	} else if dot > 1 {
-		return CellType_Dot
+		return CellTypeDot
 	}
 
 	if cross <= 0 {
-		return CellType_Cross
+		return CellTypeCross
 	} else if plus <= 0 {
-		return CellType_Plus
+		return CellTypePlus
 	} else if circle <= 0 {
-		return CellType_Circle
+		return CellTypeCircle
 	} else if dot <= 0 {
-		return CellType_Dot
+		return CellTypeDot
 	}
 
-	return CellType_Cross
+	return CellTypeCross
 }
 
+// reproduceRandomPercentage will determine cell type by randomly picking one of the neighbors.
 func reproduceRandomPercentage(cross, plus, circle, dot int) CellType {
 	var types [3]CellType
 	index := 0
 
 	for i := 0; i < cross; i++ {
-		types[index] = CellType_Cross
+		types[index] = CellTypeCross
 		index++
 	}
 	for i := 0; i < plus; i++ {
-		types[index] = CellType_Plus
+		types[index] = CellTypePlus
 		index++
 	}
 	for i := 0; i < circle; i++ {
-		types[index] = CellType_Circle
+		types[index] = CellTypeCircle
 		index++
 	}
 	for i := 0; i < dot; i++ {
-		types[index] = CellType_Dot
+		types[index] = CellTypeDot
 		index++
 	}
 
