@@ -7,6 +7,7 @@ import (
 	"github.com/faiface/pixel/imdraw"
 )
 
+// NewRectangle will create a new rectangle shape.
 func NewRectangle(min pixel.Vec, max pixel.Vec, color color.Color) *imdraw.IMDraw {
 	rect := imdraw.New(nil)
 

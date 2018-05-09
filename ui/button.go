@@ -11,6 +11,7 @@ import (
 	ptext "github.com/faiface/pixel/text"
 )
 
+// Button can be clicked to perform an action.
 type Button struct {
 	position    pixel.Vec
 	size        pixel.Rect
@@ -25,6 +26,7 @@ type Button struct {
 	action      func(button *Button)
 }
 
+// NewButton creates a new button.
 func NewButton(position pixel.Vec, text string, action func(button *Button)) *Button {
 	button := &Button{
 		size:        pixel.R(0, 0, 200, 60),
@@ -42,29 +44,35 @@ func NewButton(position pixel.Vec, text string, action func(button *Button)) *Bu
 	return button
 }
 
+// SetText sets the text for the button.
 func (b *Button) SetText(text string) {
 	b.text.Clear()
 	fmt.Fprintln(b.text, text)
 	b.redraw()
 }
 
+// SetPosition sets the position of the button.
 func (b *Button) SetPosition(position pixel.Vec) {
 	b.position = position
 	b.redraw()
 }
 
+// SetActive enables or disables the button.
 func (b *Button) SetActive(enabled bool) {
 	b.enabled = enabled
 }
 
+// Position returns the position of the button.
 func (b *Button) Position() pixel.Vec {
 	return b.position
 }
 
+// Size returns the size of the button.
 func (b *Button) Size() pixel.Rect {
 	return b.size
 }
 
+// Draw the button to the screen.
 func (b *Button) Draw(t pixel.Target) {
 	b.border.Draw(t)
 	b.fill.Draw(t)
@@ -76,6 +84,7 @@ func (b *Button) Draw(t pixel.Target) {
 	}
 }
 
+// Update will perform an action if the button has been clicked.
 func (b *Button) Update(win *pixelgl.Window) {
 	if b.enabled && win.JustPressed(pixelgl.MouseButtonLeft) {
 		mpos := win.MousePosition()
@@ -88,6 +97,7 @@ func (b *Button) Update(win *pixelgl.Window) {
 	}
 }
 
+// redraw will set the properties necessary to draw the button at a different position.
 func (b *Button) redraw() {
 	b.border = NewRectangle(b.position, b.position.Add(pixel.V(b.size.W(), b.size.H())), b.borderColor)
 	b.fill = NewRectangle(b.position.Add(pixel.V(b.borderWidth, b.borderWidth)), b.position.Add(pixel.V(b.size.W()-b.borderWidth, b.size.H()-b.borderWidth)), b.fillColor)
