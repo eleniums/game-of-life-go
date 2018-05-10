@@ -64,8 +64,13 @@ func (b *Board) Update(win *pixelgl.Window, cells game.CellGrid) {
 
 // Draw the board to the screen.
 func (b *Board) Draw(t pixel.Target, cells game.CellGrid) {
+	b.drawGrass(t)
+	b.drawCells(t, cells)
+}
+
+// drawGrass will draw the grass tiles to the board.
+func (b *Board) drawGrass(t pixel.Target) {
 	b.grassBatch.Clear()
-	b.cellBatch.Clear()
 
 	// draw grass to batch
 	for x := range b.grassGrid {
@@ -83,6 +88,13 @@ func (b *Board) Draw(t pixel.Target, cells game.CellGrid) {
 			}
 		}
 	}
+
+	b.grassBatch.Draw(t)
+}
+
+// drawCells will draw the cells to the board.
+func (b *Board) drawCells(t pixel.Target, cells game.CellGrid) {
+	b.cellBatch.Clear()
 
 	// draw cells to batch
 	for x := visibleBoardW; x < game.GridMaxX-visibleBoardW; x++ {
@@ -103,7 +115,6 @@ func (b *Board) Draw(t pixel.Target, cells game.CellGrid) {
 		}
 	}
 
-	b.grassBatch.Draw(t)
 	b.cellBatch.Draw(t)
 }
 
