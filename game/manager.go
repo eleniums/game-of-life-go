@@ -2,6 +2,8 @@ package game
 
 import (
 	"time"
+
+	"github.com/eleniums/grid"
 )
 
 var (
@@ -11,9 +13,9 @@ var (
 
 // Manager controls the grid updates.
 type Manager struct {
-	cells   CellGrid
-	buffer  CellGrid
-	memory  CellGrid
+	cells   grid.Grid
+	buffer  grid.Grid
+	memory  grid.Grid
 	running bool
 	ticker  *time.Ticker
 }
@@ -21,9 +23,9 @@ type Manager struct {
 // NewManager creates a new Manager.
 func NewManager() *Manager {
 	return &Manager{
-		cells:   NewCellGrid(),
-		buffer:  NewCellGrid(),
-		memory:  NewCellGrid(),
+		cells:   grid.NewGrid(),
+		buffer:  grid.NewGrid(),
+		memory:  grid.NewGrid(),
 		running: false,
 	}
 }
@@ -88,7 +90,7 @@ func (m *Manager) Load(path string) error {
 }
 
 // Cells returns the grid.
-func (m *Manager) Cells() CellGrid {
+func (m *Manager) Cells() grid.Grid {
 	return m.cells
 }
 

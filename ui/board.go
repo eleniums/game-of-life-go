@@ -6,6 +6,7 @@ import (
 	"github.com/eleniums/game-of-life-go/assets"
 	"github.com/eleniums/game-of-life-go/game"
 	"github.com/eleniums/game-of-life-go/sprites"
+	"github.com/eleniums/grid"
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
 )
@@ -54,7 +55,7 @@ func NewBoard() *Board {
 }
 
 // Update the board with any new mouse clicks.
-func (b *Board) Update(win *pixelgl.Window, cells game.CellGrid) {
+func (b *Board) Update(win *pixelgl.Window, cells grid.Grid) {
 	if win.JustPressed(pixelgl.MouseButtonLeft) {
 		changeCell(cells, win.MousePosition(), true, SetCellType)
 	} else if win.JustPressed(pixelgl.MouseButtonRight) {
@@ -63,7 +64,7 @@ func (b *Board) Update(win *pixelgl.Window, cells game.CellGrid) {
 }
 
 // Draw the board to the screen.
-func (b *Board) Draw(t pixel.Target, cells game.CellGrid) {
+func (b *Board) Draw(t pixel.Target, cells grid.Grid) {
 	b.drawGrass(t)
 	b.drawCells(t, cells)
 }
@@ -93,7 +94,7 @@ func (b *Board) drawGrass(t pixel.Target) {
 }
 
 // drawCells will draw the cells to the board.
-func (b *Board) drawCells(t pixel.Target, cells game.CellGrid) {
+func (b *Board) drawCells(t pixel.Target, cells grid.Grid) {
 	b.cellBatch.Clear()
 
 	// draw cells to batch
@@ -125,7 +126,7 @@ func draw(batch *pixel.Batch, tile *pixel.Sprite, x, y int) {
 }
 
 // changeCell will switch a cell to a different state and type.
-func changeCell(cells game.CellGrid, pos pixel.Vec, alive bool, cellType game.CellType) {
+func changeCell(cells grid.Grid, pos pixel.Vec, alive bool, cellType game.CellType) {
 	x := int(pos.X/10 + visibleBoardW)
 	y := int(pos.Y/10 + visibleBoardH)
 

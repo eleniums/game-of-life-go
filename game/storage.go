@@ -3,6 +3,8 @@ package game
 import (
 	"encoding/json"
 	"io/ioutil"
+
+	"github.com/eleniums/grid"
 )
 
 // storage defines the type used to store a cell in a file.
@@ -13,7 +15,7 @@ type storage struct {
 }
 
 // save a grid to a file.
-func save(cells CellGrid, path string) error {
+func save(cells grid.Grid, path string) error {
 	compact := []*storage{}
 	for x := range cells {
 		for y := range cells[x] {
@@ -38,7 +40,7 @@ func save(cells CellGrid, path string) error {
 }
 
 // load a pattern from a file to a grid.
-func load(path string) (CellGrid, error) {
+func load(path string) (grid.Grid, error) {
 	data, err := ioutil.ReadFile(path)
 	if err != nil {
 		return nil, err
@@ -47,7 +49,7 @@ func load(path string) (CellGrid, error) {
 	var compact []*storage
 	err = json.Unmarshal(data, &compact)
 
-	cells := NewCellGrid()
+	cells := grid.NewGrid()
 	for _, v := range compact {
 		cells[v.X][v.Y] = v.Cell
 	}

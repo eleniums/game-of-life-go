@@ -3,6 +3,8 @@ package game
 import (
 	"testing"
 
+	"github.com/eleniums/grid"
+
 	assert "github.com/stretchr/testify/require"
 )
 
@@ -24,7 +26,7 @@ func Test_countNeighbors_Alive(t *testing.T) {
 		{"Lower Right", 6, 4, 3},
 	}
 
-	cells := NewCellGrid()
+	cells := grid.NewGrid()
 	for x := 4; x <= 6; x++ {
 		for y := 4; y <= 6; y++ {
 			cells[x][y].Alive = true
@@ -57,7 +59,7 @@ func Test_countNeighbors_Type_Cross(t *testing.T) {
 		{"Lower Right", 6, 4, 3},
 	}
 
-	cells := NewCellGrid()
+	cells := grid.NewGrid()
 	for x := 4; x <= 6; x++ {
 		for y := 4; y <= 6; y++ {
 			cells[x][y].Alive = true
@@ -91,7 +93,7 @@ func Test_countNeighbors_Type_Plus(t *testing.T) {
 		{"Lower Right", 6, 4, 3},
 	}
 
-	cells := NewCellGrid()
+	cells := grid.NewGrid()
 	for x := 4; x <= 6; x++ {
 		for y := 4; y <= 6; y++ {
 			cells[x][y].Alive = true
@@ -125,7 +127,7 @@ func Test_countNeighbors_Type_Circle(t *testing.T) {
 		{"Lower Right", 6, 4, 3},
 	}
 
-	cells := NewCellGrid()
+	cells := grid.NewGrid()
 	for x := 4; x <= 6; x++ {
 		for y := 4; y <= 6; y++ {
 			cells[x][y].Alive = true
@@ -159,7 +161,7 @@ func Test_countNeighbors_Type_Dot(t *testing.T) {
 		{"Lower Right", 6, 4, 3},
 	}
 
-	cells := NewCellGrid()
+	cells := grid.NewGrid()
 	for x := 4; x <= 6; x++ {
 		for y := 4; y <= 6; y++ {
 			cells[x][y].Alive = true
@@ -177,7 +179,7 @@ func Test_countNeighbors_Type_Dot(t *testing.T) {
 
 func Benchmark_countNeighbors(b *testing.B) {
 	b.Run("Best Case", func(b *testing.B) {
-		cells := NewCellGrid()
+		cells := grid.NewGrid()
 
 		cells[4][5].Alive = false
 		cells[6][5].Alive = false
@@ -196,7 +198,7 @@ func Benchmark_countNeighbors(b *testing.B) {
 	})
 
 	b.Run("Worst Case", func(b *testing.B) {
-		cells := NewCellGrid()
+		cells := grid.NewGrid()
 
 		cells[4][5].Alive = true
 		cells[6][5].Alive = true
