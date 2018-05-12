@@ -101,7 +101,7 @@ func (m *Manager) Running() bool {
 func (m *Manager) updateBuffer() {
 	for x := range m.cells {
 		for y := range m.cells[x] {
-			neighbors, cross, plus, circle, dot := m.cells.CountNeighbors(x, y)
+			neighbors, cross, plus, circle, dot := countNeighbors(m.cells, x, y)
 			if m.cells[x][y].Alive {
 				m.buffer[x][y].Type = m.cells[x][y].Type
 			} else if neighbors == 3 {

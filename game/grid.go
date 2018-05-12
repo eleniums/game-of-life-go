@@ -48,34 +48,3 @@ func (c CellGrid) Copy() CellGrid {
 
 	return grid
 }
-
-// IsAlive will determine if the cell at the given position is alive.
-func (c CellGrid) IsAlive(x, y int) bool {
-	if x < 0 || x >= GridMaxX || y < 0 || y >= GridMaxY {
-		return false
-	}
-
-	return c[x][y].Alive
-}
-
-// CountNeighbors will count the number of living neighbors surrounding a cell.
-func (c CellGrid) CountNeighbors(x, y int) (count, cross, plus, circle, dot int) {
-	for i := x - 1; i <= x+1; i++ {
-		for j := y - 1; j <= y+1; j++ {
-			if c.IsAlive(i, j) && !(i == x && j == y) {
-				switch c[i][j].Type {
-				case CellTypeCross:
-					cross++
-				case CellTypePlus:
-					plus++
-				case CellTypeCircle:
-					circle++
-				case CellTypeDot:
-					dot++
-				}
-			}
-		}
-	}
-
-	return cross + plus + circle + dot, cross, plus, circle, dot
-}
