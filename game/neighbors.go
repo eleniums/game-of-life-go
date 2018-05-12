@@ -1,14 +1,5 @@
 package game
 
-// IsAlive will determine if the cell at the given position is alive.
-func isAlive(g CellGrid, x, y int) bool {
-	if x < 0 || x >= GridMaxX || y < 0 || y >= GridMaxY {
-		return false
-	}
-
-	return g[x][y].Alive
-}
-
 // countNeighbors will count the number of living neighbors surrounding a cell.
 func countNeighbors(g CellGrid, x, y int) (count, cross, plus, circle, dot int) {
 	for i := x - 1; i <= x+1; i++ {
@@ -29,4 +20,13 @@ func countNeighbors(g CellGrid, x, y int) (count, cross, plus, circle, dot int) 
 	}
 
 	return cross + plus + circle + dot, cross, plus, circle, dot
+}
+
+// isAlive will determine if the cell at the given position is alive.
+func isAlive(g CellGrid, x, y int) bool {
+	if x < 0 || x >= GridMaxX || y < 0 || y >= GridMaxY {
+		return false
+	}
+
+	return g[x][y].Alive
 }
