@@ -17,15 +17,13 @@ type storage struct {
 // save a grid to a file.
 func save(cells grid.Grid, path string) error {
 	compact := []*storage{}
-	for x := range cells {
-		for y := range cells[x] {
-			if cells[x][y].Alive {
-				compact = append(compact, &storage{
-					Cell: cells[x][y],
-					X:    x,
-					Y:    y,
-				})
-			}
+	for k, v := range cells {
+		if v.(*Cell).Alive {
+			compact = append(compact, &storage{
+				Cell: v.(*Cell),
+				X:    int(k.X),
+				Y:    int(k.Y),
+			})
 		}
 	}
 
@@ -51,7 +49,7 @@ func load(path string) (grid.Grid, error) {
 
 	cells := grid.NewGrid()
 	for _, v := range compact {
-		cells[v.X][v.Y] = v.Cell
+		cells.Add(float64(v.X), float64(v.Y), v.Cell)
 	}
 
 	return cells, err
