@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 
-	"github.com/eleniums/grid"
+	"github.com/eleniums/game-of-life-go/game"
 )
 
 // storage defines the type used to store a cell in a file.
@@ -15,16 +15,17 @@ type storage struct {
 }
 
 // save a grid to a file.
-func save(cells grid.Grid, path string) error {
+func save(cells game.Grid, path string) error {
 	compact := []*storage{}
 	for k, v := range cells {
-		if v.(*Cell).Alive {
-			compact = append(compact, &storage{
-				Cell: v.(*Cell),
-				X:    int(k.X),
-				Y:    int(k.Y),
-			})
-		}
+		compact = append(compact, &storage{
+			Cell: &Cell{
+				Alive: true,
+				Type:  v,
+			},
+			X: k.X,
+			Y: k.Y,
+		})
 	}
 
 	data, err := json.Marshal(compact)
@@ -38,7 +39,7 @@ func save(cells grid.Grid, path string) error {
 }
 
 // load a pattern from a file to a grid.
-func load(path string) (grid.Grid, error) {
+func load(path string) (game.Grid, error) {
 	data, err := ioutil.ReadFile(path)
 	if err != nil {
 		return nil, err
@@ -47,9 +48,9 @@ func load(path string) (grid.Grid, error) {
 	var compact []*storage
 	err = json.Unmarshal(data, &compact)
 
-	cells := grid.NewGrid()
+	cells := game.NewGrid()
 	for _, v := range compact {
-		cells.Add(float64(v.X), float64(v.Y), v.Cell)
+		cells.Add(v.X, v.Y, v.Cell.Type)
 	}
 
 	return cells, err
