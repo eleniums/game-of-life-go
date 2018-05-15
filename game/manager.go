@@ -99,16 +99,21 @@ func (m *Manager) Running() bool {
 
 // updateBuffer will iterate over the grid and apply rules.
 func (m *Manager) updateBuffer() {
+	dead := NewGrid()
+
 	for k, v := range m.cells {
-		neighbors, _, _, _, _ := countNeighbors(m.cells, k.X, k.Y)
-		//neighbors, cross, plus, circle, dot := countNeighbors(m.cells, k.X, k.Y)
-		// if v.(*Cell).Alive {
-		// 	m.buffer[k] = v
-		// } else if neighbors == 3 {
-		// 	m.buffer[k] = determineType(cross, plus, circle, dot)
-		// }
+		neighbors, _, _, _, _ := countNeighbors(m.cells, k.X, k.Y, func(x, y int) {
+			dead.Add(x, y, CellTypeCross)
+		})
 		if applyRules(true, neighbors) {
 			m.buffer[k] = v
+		}
+	}
+
+	for k := range dead {
+		neighbors, cross, plus, circle, dot := countNeighbors(m.cells, k.X, k.Y, nil)
+		if applyRules(false, neighbors) {
+			m.buffer[k] = determineType(cross, plus, circle, dot)
 		}
 	}
 }
