@@ -3,8 +3,6 @@ package game
 import (
 	"testing"
 
-	"github.com/eleniums/grid"
-
 	assert "github.com/stretchr/testify/require"
 )
 
@@ -26,10 +24,10 @@ func Test_countNeighbors_Alive(t *testing.T) {
 		{"Lower Right", 6, 4, 3},
 	}
 
-	cells := grid.NewGrid()
+	cells := NewGrid()
 	for x := 4; x <= 6; x++ {
 		for y := 4; y <= 6; y++ {
-			cells[x][y].Alive = true
+			cells.Add(x, y, CellTypeCross)
 		}
 	}
 
@@ -59,11 +57,10 @@ func Test_countNeighbors_Type_Cross(t *testing.T) {
 		{"Lower Right", 6, 4, 3},
 	}
 
-	cells := grid.NewGrid()
+	cells := NewGrid()
 	for x := 4; x <= 6; x++ {
 		for y := 4; y <= 6; y++ {
-			cells[x][y].Alive = true
-			cells[x][y].Type = CellTypeCross
+			cells.Add(x, y, CellTypeCross)
 		}
 	}
 
@@ -93,11 +90,10 @@ func Test_countNeighbors_Type_Plus(t *testing.T) {
 		{"Lower Right", 6, 4, 3},
 	}
 
-	cells := grid.NewGrid()
+	cells := NewGrid()
 	for x := 4; x <= 6; x++ {
 		for y := 4; y <= 6; y++ {
-			cells[x][y].Alive = true
-			cells[x][y].Type = CellTypePlus
+			cells.Add(x, y, CellTypePlus)
 		}
 	}
 
@@ -127,11 +123,10 @@ func Test_countNeighbors_Type_Circle(t *testing.T) {
 		{"Lower Right", 6, 4, 3},
 	}
 
-	cells := grid.NewGrid()
+	cells := NewGrid()
 	for x := 4; x <= 6; x++ {
 		for y := 4; y <= 6; y++ {
-			cells[x][y].Alive = true
-			cells[x][y].Type = CellTypeCircle
+			cells.Add(x, y, CellTypeCircle)
 		}
 	}
 
@@ -161,11 +156,10 @@ func Test_countNeighbors_Type_Dot(t *testing.T) {
 		{"Lower Right", 6, 4, 3},
 	}
 
-	cells := grid.NewGrid()
+	cells := NewGrid()
 	for x := 4; x <= 6; x++ {
 		for y := 4; y <= 6; y++ {
-			cells[x][y].Alive = true
-			cells[x][y].Type = CellTypeDot
+			cells.Add(x, y, CellTypeDot)
 		}
 	}
 
@@ -179,16 +173,7 @@ func Test_countNeighbors_Type_Dot(t *testing.T) {
 
 func Benchmark_countNeighbors(b *testing.B) {
 	b.Run("Best Case", func(b *testing.B) {
-		cells := grid.NewGrid()
-
-		cells[4][5].Alive = false
-		cells[6][5].Alive = false
-		cells[5][6].Alive = false
-		cells[4][6].Alive = false
-		cells[6][6].Alive = false
-		cells[5][4].Alive = false
-		cells[4][4].Alive = false
-		cells[6][4].Alive = false
+		cells := NewGrid()
 
 		b.ResetTimer()
 
@@ -198,16 +183,16 @@ func Benchmark_countNeighbors(b *testing.B) {
 	})
 
 	b.Run("Worst Case", func(b *testing.B) {
-		cells := grid.NewGrid()
+		cells := NewGrid()
 
-		cells[4][5].Alive = true
-		cells[6][5].Alive = true
-		cells[5][6].Alive = true
-		cells[4][6].Alive = true
-		cells[6][6].Alive = true
-		cells[5][4].Alive = true
-		cells[4][4].Alive = true
-		cells[6][4].Alive = true
+		cells.Add(4, 5, CellTypeCross)
+		cells.Add(6, 5, CellTypeCross)
+		cells.Add(5, 6, CellTypeCross)
+		cells.Add(4, 6, CellTypeCross)
+		cells.Add(6, 6, CellTypeCross)
+		cells.Add(5, 4, CellTypeCross)
+		cells.Add(4, 4, CellTypeCross)
+		cells.Add(6, 4, CellTypeCross)
 
 		b.ResetTimer()
 

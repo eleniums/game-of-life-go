@@ -2,8 +2,6 @@ package game
 
 import (
 	"time"
-
-	"github.com/eleniums/grid"
 )
 
 var (
@@ -13,9 +11,9 @@ var (
 
 // Manager controls the grid updates.
 type Manager struct {
-	cells   grid.Grid
-	buffer  grid.Grid
-	memory  grid.Grid
+	cells   Grid
+	buffer  Grid
+	memory  Grid
 	running bool
 	ticker  *time.Ticker
 }
@@ -23,9 +21,9 @@ type Manager struct {
 // NewManager creates a new Manager.
 func NewManager() *Manager {
 	return &Manager{
-		cells:   grid.NewGrid(),
-		buffer:  grid.NewGrid(),
-		memory:  grid.NewGrid(),
+		cells:   NewGrid(),
+		buffer:  NewGrid(),
+		memory:  NewGrid(),
 		running: false,
 	}
 }
@@ -90,7 +88,7 @@ func (m *Manager) Load(path string) error {
 }
 
 // Cells returns the grid.
-func (m *Manager) Cells() grid.Grid {
+func (m *Manager) Cells() Grid {
 	return m.cells
 }
 
@@ -101,15 +99,16 @@ func (m *Manager) Running() bool {
 
 // updateBuffer will iterate over the grid and apply rules.
 func (m *Manager) updateBuffer() {
-	for x := range m.cells {
-		for y := range m.cells[x] {
-			neighbors, cross, plus, circle, dot := countNeighbors(m.cells, x, y)
-			if m.cells[x][y].Alive {
-				m.buffer[x][y].Type = m.cells[x][y].Type
-			} else if neighbors == 3 {
-				m.buffer[x][y].Type = determineType(cross, plus, circle, dot)
-			}
-			m.buffer[x][y].Alive = applyRules(m.cells[x][y].Alive, neighbors)
+	for k, v := range m.cells {
+		neighbors, _, _, _, _ := countNeighbors(m.cells, k.X, k.Y)
+		//neighbors, cross, plus, circle, dot := countNeighbors(m.cells, k.X, k.Y)
+		// if v.(*Cell).Alive {
+		// 	m.buffer[k] = v
+		// } else if neighbors == 3 {
+		// 	m.buffer[k] = determineType(cross, plus, circle, dot)
+		// }
+		if applyRules(true, neighbors) {
+			m.buffer[k] = v
 		}
 	}
 }

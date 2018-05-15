@@ -1,7 +1,7 @@
 package game
 
 // Grid is a grid of values of any type.
-type Grid map[Position]game.CellType
+type Grid map[Position]CellType
 
 // NewGrid will create a new empty grid.
 func NewGrid() Grid {
@@ -9,7 +9,7 @@ func NewGrid() Grid {
 }
 
 // Add value at position (x, y).
-func (g Grid) Add(x, y int, value interface{}) {
+func (g Grid) Add(x, y int, value CellType) {
 	g[NewPosition(x, y)] = value
 }
 

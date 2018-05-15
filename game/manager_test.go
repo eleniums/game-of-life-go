@@ -9,33 +9,43 @@ import (
 func Test_Manager_swapBuffer(t *testing.T) {
 	manager := NewManager()
 
-	manager.cells[25][25].Alive = true
-	manager.buffer[5][5].Alive = true
+	manager.cells.Add(25, 25, CellTypeCross)
+	manager.buffer.Add(5, 5, CellTypeCross)
 
 	manager.swapBuffer()
 
-	assert.False(t, manager.cells[25][25].Alive)
-	assert.True(t, manager.cells[5][5].Alive)
+	var ok bool
+	_, ok = manager.cells.Retrieve(25, 25)
+	assert.False(t, ok)
+	_, ok = manager.cells.Retrieve(5, 5)
+	assert.True(t, ok)
 
-	assert.True(t, manager.buffer[25][25].Alive)
-	assert.False(t, manager.buffer[5][5].Alive)
+	_, ok = manager.buffer.Retrieve(25, 25)
+	assert.True(t, ok)
+	_, ok = manager.buffer.Retrieve(5, 5)
+	assert.False(t, ok)
 }
 
 func Test_Manager_updateBuffer(t *testing.T) {
 	manager := NewManager()
-	cells := manager.Cells()
 
-	cells[24][25].Alive = true
-	cells[25][25].Alive = true
-	cells[26][25].Alive = true
+	manager.cells.Add(24, 25, CellTypeCross)
+	manager.cells.Add(25, 25, CellTypeCross)
+	manager.cells.Add(26, 25, CellTypeCross)
 
 	manager.updateBuffer()
 
-	assert.False(t, manager.buffer[24][25].Alive)
-	assert.True(t, manager.buffer[25][25].Alive)
-	assert.False(t, manager.buffer[26][25].Alive)
-	assert.True(t, manager.buffer[25][24].Alive)
-	assert.True(t, manager.buffer[25][26].Alive)
+	var ok bool
+	_, ok = manager.buffer.Retrieve(24, 25)
+	assert.False(t, ok)
+	_, ok = manager.buffer.Retrieve(25, 25)
+	assert.True(t, ok)
+	_, ok = manager.buffer.Retrieve(26, 25)
+	assert.False(t, ok)
+	_, ok = manager.buffer.Retrieve(25, 24)
+	assert.True(t, ok)
+	_, ok = manager.buffer.Retrieve(25, 26)
+	assert.True(t, ok)
 }
 
 func Benchmark_Manager_swapBuffer(b *testing.B) {
@@ -61,13 +71,11 @@ func Benchmark_Manager_updateBuffer(b *testing.B) {
 
 	b.Run("Average Case", func(b *testing.B) {
 		manager := NewManager()
-		cells := manager.Cells()
 
-		for x := range cells {
+		for x := 0; x < 288; x++ {
 			if x%2 == 0 {
-				for y := range cells[x] {
-					cells[x][y].Alive = true
-					cells[x][y].Type = CellType(y % 4)
+				for y := 0; y < 288; y++ {
+					manager.cells.Add(x, y, CellType(y%4))
 				}
 			}
 		}
@@ -81,12 +89,10 @@ func Benchmark_Manager_updateBuffer(b *testing.B) {
 
 	b.Run("Worst Case", func(b *testing.B) {
 		manager := NewManager()
-		cells := manager.Cells()
 
-		for x := range cells {
-			for y := range cells[x] {
-				cells[x][y].Alive = true
-				cells[x][y].Type = CellType(y % 4)
+		for x := 0; x < 288; x++ {
+			for y := 0; y < 288; y++ {
+				manager.cells.Add(x, y, CellType(y%4))
 			}
 		}
 
