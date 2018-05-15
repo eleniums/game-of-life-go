@@ -4,18 +4,16 @@ package game
 func countNeighbors(cells Grid, x, y int) (count, cross, plus, circle, dot int) {
 	for i := x - 1; i <= x+1; i++ {
 		for j := y - 1; j <= y+1; j++ {
-			if !(i == x && j == y) {
-				if cell, ok := cells.Retrieve(x, y); ok {
-					switch cell {
-					case CellTypeCross:
-						cross++
-					case CellTypePlus:
-						plus++
-					case CellTypeCircle:
-						circle++
-					case CellTypeDot:
-						dot++
-					}
+			if cell, ok := cells.Retrieve(i, j); ok && !(i == x && j == y) {
+				switch cell {
+				case CellTypeCross:
+					cross++
+				case CellTypePlus:
+					plus++
+				case CellTypeCircle:
+					circle++
+				case CellTypeDot:
+					dot++
 				}
 			}
 		}
