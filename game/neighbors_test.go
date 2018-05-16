@@ -24,16 +24,16 @@ func Test_countNeighbors_Alive(t *testing.T) {
 		{"Lower Right", 6, 4, 3},
 	}
 
-	cells := NewGrid()
+	manager := NewManager()
 	for x := 4; x <= 6; x++ {
 		for y := 4; y <= 6; y++ {
-			cells.Add(x, y, CellTypeCross)
+			manager.cells.Add(x, y, CellTypeCross)
 		}
 	}
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			count, _, _, _, _ := countNeighbors(cells, tc.x, tc.y, nil)
+			count, _, _, _, _ := manager.countNeighbors(tc.x, tc.y, nil)
 			assert.Equal(t, tc.want, count)
 		})
 	}
@@ -57,16 +57,16 @@ func Test_countNeighbors_Type_Cross(t *testing.T) {
 		{"Lower Right", 6, 4, 3},
 	}
 
-	cells := NewGrid()
+	manager := NewManager()
 	for x := 4; x <= 6; x++ {
 		for y := 4; y <= 6; y++ {
-			cells.Add(x, y, CellTypeCross)
+			manager.cells.Add(x, y, CellTypeCross)
 		}
 	}
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			_, cross, _, _, _ := countNeighbors(cells, tc.x, tc.y, nil)
+			_, cross, _, _, _ := manager.countNeighbors(tc.x, tc.y, nil)
 			assert.Equal(t, tc.want, cross)
 		})
 	}
@@ -90,16 +90,16 @@ func Test_countNeighbors_Type_Plus(t *testing.T) {
 		{"Lower Right", 6, 4, 3},
 	}
 
-	cells := NewGrid()
+	manager := NewManager()
 	for x := 4; x <= 6; x++ {
 		for y := 4; y <= 6; y++ {
-			cells.Add(x, y, CellTypePlus)
+			manager.cells.Add(x, y, CellTypePlus)
 		}
 	}
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			_, _, plus, _, _ := countNeighbors(cells, tc.x, tc.y, nil)
+			_, _, plus, _, _ := manager.countNeighbors(tc.x, tc.y, nil)
 			assert.Equal(t, tc.want, plus)
 		})
 	}
@@ -123,16 +123,16 @@ func Test_countNeighbors_Type_Circle(t *testing.T) {
 		{"Lower Right", 6, 4, 3},
 	}
 
-	cells := NewGrid()
+	manager := NewManager()
 	for x := 4; x <= 6; x++ {
 		for y := 4; y <= 6; y++ {
-			cells.Add(x, y, CellTypeCircle)
+			manager.cells.Add(x, y, CellTypeCircle)
 		}
 	}
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			_, _, _, circle, _ := countNeighbors(cells, tc.x, tc.y, nil)
+			_, _, _, circle, _ := manager.countNeighbors(tc.x, tc.y, nil)
 			assert.Equal(t, tc.want, circle)
 		})
 	}
@@ -156,16 +156,16 @@ func Test_countNeighbors_Type_Dot(t *testing.T) {
 		{"Lower Right", 6, 4, 3},
 	}
 
-	cells := NewGrid()
+	manager := NewManager()
 	for x := 4; x <= 6; x++ {
 		for y := 4; y <= 6; y++ {
-			cells.Add(x, y, CellTypeDot)
+			manager.cells.Add(x, y, CellTypeDot)
 		}
 	}
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			_, _, _, _, dot := countNeighbors(cells, tc.x, tc.y, nil)
+			_, _, _, _, dot := manager.countNeighbors(tc.x, tc.y, nil)
 			assert.Equal(t, tc.want, dot)
 		})
 	}
@@ -173,31 +173,31 @@ func Test_countNeighbors_Type_Dot(t *testing.T) {
 
 func Benchmark_countNeighbors(b *testing.B) {
 	b.Run("Best Case", func(b *testing.B) {
-		cells := NewGrid()
+		manager := NewManager()
 
 		b.ResetTimer()
 
 		for i := 0; i < b.N; i++ {
-			countNeighbors(cells, 5, 5, nil)
+			manager.countNeighbors(5, 5, nil)
 		}
 	})
 
 	b.Run("Worst Case", func(b *testing.B) {
-		cells := NewGrid()
+		manager := NewManager()
 
-		cells.Add(4, 5, CellTypeCross)
-		cells.Add(6, 5, CellTypeCross)
-		cells.Add(5, 6, CellTypeCross)
-		cells.Add(4, 6, CellTypeCross)
-		cells.Add(6, 6, CellTypeCross)
-		cells.Add(5, 4, CellTypeCross)
-		cells.Add(4, 4, CellTypeCross)
-		cells.Add(6, 4, CellTypeCross)
+		manager.cells.Add(4, 5, CellTypeCross)
+		manager.cells.Add(6, 5, CellTypeCross)
+		manager.cells.Add(5, 6, CellTypeCross)
+		manager.cells.Add(4, 6, CellTypeCross)
+		manager.cells.Add(6, 6, CellTypeCross)
+		manager.cells.Add(5, 4, CellTypeCross)
+		manager.cells.Add(4, 4, CellTypeCross)
+		manager.cells.Add(6, 4, CellTypeCross)
 
 		b.ResetTimer()
 
 		for i := 0; i < b.N; i++ {
-			countNeighbors(cells, 5, 5, nil)
+			manager.countNeighbors(5, 5, nil)
 		}
 	})
 }

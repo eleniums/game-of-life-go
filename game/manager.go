@@ -102,7 +102,7 @@ func (m *Manager) updateBuffer() {
 	dead := NewGrid()
 
 	for k, v := range m.cells {
-		neighbors, _, _, _, _ := countNeighbors(m.cells, k.X, k.Y, func(x, y int) {
+		neighbors, _, _, _, _ := m.countNeighbors(k.X, k.Y, func(x, y int) {
 			dead.Add(x, y, CellTypeCross)
 		})
 		if applyRules(true, neighbors) {
@@ -111,7 +111,7 @@ func (m *Manager) updateBuffer() {
 	}
 
 	for k := range dead {
-		neighbors, cross, plus, circle, dot := countNeighbors(m.cells, k.X, k.Y, nil)
+		neighbors, cross, plus, circle, dot := m.countNeighbors(k.X, k.Y, nil)
 		if applyRules(false, neighbors) {
 			m.buffer[k] = determineType(cross, plus, circle, dot)
 		}

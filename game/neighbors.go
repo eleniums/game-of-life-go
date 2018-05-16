@@ -1,11 +1,11 @@
 package game
 
 // countNeighbors will count the number of living neighbors surrounding a cell.
-func countNeighbors(cells Grid, x, y int, dead func(x, y int)) (count, cross, plus, circle, dot int) {
+func (m *Manager) countNeighbors(x, y int, dead func(x, y int)) (count, cross, plus, circle, dot int) {
 	for i := x - 1; i <= x+1; i++ {
 		for j := y - 1; j <= y+1; j++ {
 			if !(i == x && j == y) {
-				if cell, ok := cells.Retrieve(i, j); ok {
+				if cell, ok := m.cells.Retrieve(i, j); ok {
 					switch cell {
 					case CellTypeCross:
 						cross++
