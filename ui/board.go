@@ -6,7 +6,6 @@ import (
 	"github.com/eleniums/game-of-life-go/assets"
 	"github.com/eleniums/game-of-life-go/game"
 	"github.com/eleniums/game-of-life-go/sprites"
-	"github.com/eleniums/grid"
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
 )
@@ -19,6 +18,10 @@ const (
 	// dimensions of visible board space
 	visibleBoardW = 96
 	visibleBoardH = 96
+
+	// total board space (deprecated)
+	gridMaxX = 288
+	gridMaxY = 288
 )
 
 var (
@@ -55,7 +58,7 @@ func NewBoard() *Board {
 }
 
 // Update the board with any new mouse clicks.
-func (b *Board) Update(win *pixelgl.Window, cells grid.Grid) {
+func (b *Board) Update(win *pixelgl.Window, cells game.Grid) {
 	if win.JustPressed(pixelgl.MouseButtonLeft) {
 		changeCell(cells, win.MousePosition(), true, SetCellType)
 	} else if win.JustPressed(pixelgl.MouseButtonRight) {
@@ -64,7 +67,7 @@ func (b *Board) Update(win *pixelgl.Window, cells grid.Grid) {
 }
 
 // Draw the board to the screen.
-func (b *Board) Draw(t pixel.Target, cells grid.Grid) {
+func (b *Board) Draw(t pixel.Target, cells game.Grid) {
 	b.drawGrass(t)
 	b.drawCells(t, cells)
 }
@@ -94,24 +97,22 @@ func (b *Board) drawGrass(t pixel.Target) {
 }
 
 // drawCells will draw the cells to the board.
-func (b *Board) drawCells(t pixel.Target, cells grid.Grid) {
+func (b *Board) drawCells(t pixel.Target, cells game.Grid) {
 	b.cellBatch.Clear()
 
 	// draw cells to batch
-	for x := visibleBoardW; x < game.GridMaxX-visibleBoardW; x++ {
-		for y := visibleBoardH; y < game.GridMaxY-visibleBoardH; y++ {
-			if cells[x][y].Alive {
-				switch cells[x][y].Type {
-				case 0:
-					draw(b.cellBatch, sprites.Cell1, x-visibleBoardW, y-visibleBoardH)
-				case 1:
-					draw(b.cellBatch, sprites.Cell2, x-visibleBoardW, y-visibleBoardH)
-				case 2:
-					draw(b.cellBatch, sprites.Cell3, x-visibleBoardW, y-visibleBoardH)
-				case 3:
-					draw(b.cellBatch, sprites.Cell4, x-visibleBoardW, y-visibleBoardH)
-				default:
-				}
+	for k, v := range cells {
+		if k.X >= visibleBoardW && k.Y >= visibleBoardH && k.X < gridMaxX-visibleBoardW && k.Y < gridMaxY-visibleBoardH {
+			switch v {
+			case 0:
+				draw(b.cellBatch, sprites.Cell1, k.X-visibleBoardW, k.Y-visibleBoardH)
+			case 1:
+				draw(b.cellBatch, sprites.Cell2, k.X-visibleBoardW, k.Y-visibleBoardH)
+			case 2:
+				draw(b.cellBatch, sprites.Cell3, k.X-visibleBoardW, k.Y-visibleBoardH)
+			case 3:
+				draw(b.cellBatch, sprites.Cell4, k.X-visibleBoardW, k.Y-visibleBoardH)
+			default:
 			}
 		}
 	}
@@ -126,14 +127,15 @@ func draw(batch *pixel.Batch, tile *pixel.Sprite, x, y int) {
 }
 
 // changeCell will switch a cell to a different state and type.
-func changeCell(cells grid.Grid, pos pixel.Vec, alive bool, cellType game.CellType) {
+func changeCell(cells game.Grid, pos pixel.Vec, alive bool, cellType game.CellType) {
 	x := int(pos.X/10 + visibleBoardW)
 	y := int(pos.Y/10 + visibleBoardH)
 
-	if x < visibleBoardW || x >= game.GridMaxX-visibleBoardW || y < visibleBoardH || y >= game.GridMaxY-visibleBoardH {
+	if x < visibleBoardW || x >= gridMaxX-visibleBoardW || y < visibleBoardH || y >= gridMaxY-visibleBoardH {
 		// do nothing
+	} else if alive {
+		cells.Add(x, y, cellType)
 	} else {
-		cells[x][y].Alive = alive
-		cells[x][y].Type = cellType
+		cells.Delete(x, y)
 	}
 }
