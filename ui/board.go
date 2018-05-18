@@ -18,15 +18,14 @@ const (
 	// dimensions of visible board space
 	visibleBoardW = 96
 	visibleBoardH = 96
-
-	// total board space (deprecated)
-	gridMaxX = 288
-	gridMaxY = 288
 )
 
 var (
 	// SetCellType is the type of cell to place when the grid is clicked.
 	SetCellType = game.CellTypeCross
+
+	// lower left corner of visible space
+	boardPos = pixel.V(96.0, 96.0)
 )
 
 // Board contains batches for drawing the grass and cells.
@@ -102,7 +101,7 @@ func (b *Board) drawCells(t pixel.Target, cells game.Grid) {
 
 	// draw cells to batch
 	for k, v := range cells {
-		if k.X >= visibleBoardW && k.Y >= visibleBoardH && k.X < gridMaxX-visibleBoardW && k.Y < gridMaxY-visibleBoardH {
+		if k.X >= int(boardPos.X) && k.Y >= int(boardPos.Y) && k.X < int(boardPos.X)+visibleBoardW && k.Y < int(boardPos.Y)+visibleBoardH {
 			switch v {
 			case 0:
 				draw(b.cellBatch, sprites.Cell1, k.X-visibleBoardW, k.Y-visibleBoardH)
@@ -131,7 +130,7 @@ func changeCell(cells game.Grid, pos pixel.Vec, alive bool, cellType game.CellTy
 	x := int(pos.X/10 + visibleBoardW)
 	y := int(pos.Y/10 + visibleBoardH)
 
-	if x < visibleBoardW || x >= gridMaxX-visibleBoardW || y < visibleBoardH || y >= gridMaxY-visibleBoardH {
+	if x < int(boardPos.X) || x >= int(boardPos.X)+visibleBoardW || y < int(boardPos.Y) || y >= int(boardPos.Y)+visibleBoardH {
 		// do nothing
 	} else if alive {
 		cells.Add(x, y, cellType)
