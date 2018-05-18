@@ -101,18 +101,21 @@ func (b *Board) drawCells(t pixel.Target, cells game.Grid) {
 
 	// draw cells to batch
 	for k, v := range cells {
-		if k.X >= int(boardPos.X) && k.Y >= int(boardPos.Y) && k.X < int(boardPos.X)+visibleBoardW && k.Y < int(boardPos.Y)+visibleBoardH {
-			switch v {
-			case 0:
-				draw(b.cellBatch, sprites.Cell1, k.X-visibleBoardW, k.Y-visibleBoardH)
-			case 1:
-				draw(b.cellBatch, sprites.Cell2, k.X-visibleBoardW, k.Y-visibleBoardH)
-			case 2:
-				draw(b.cellBatch, sprites.Cell3, k.X-visibleBoardW, k.Y-visibleBoardH)
-			case 3:
-				draw(b.cellBatch, sprites.Cell4, k.X-visibleBoardW, k.Y-visibleBoardH)
-			default:
-			}
+		// check if cell is visible and skip if it is not visible
+		if k.X < int(boardPos.X) || k.Y < int(boardPos.Y) || k.X >= int(boardPos.X)+visibleBoardW || k.Y >= int(boardPos.Y)+visibleBoardH {
+			continue
+		}
+
+		switch v {
+		case 0:
+			draw(b.cellBatch, sprites.Cell1, k.X-visibleBoardW, k.Y-visibleBoardH)
+		case 1:
+			draw(b.cellBatch, sprites.Cell2, k.X-visibleBoardW, k.Y-visibleBoardH)
+		case 2:
+			draw(b.cellBatch, sprites.Cell3, k.X-visibleBoardW, k.Y-visibleBoardH)
+		case 3:
+			draw(b.cellBatch, sprites.Cell4, k.X-visibleBoardW, k.Y-visibleBoardH)
+		default:
 		}
 	}
 
@@ -130,9 +133,13 @@ func changeCell(cells game.Grid, pos pixel.Vec, alive bool, cellType game.CellTy
 	x := int(pos.X/10 + visibleBoardW)
 	y := int(pos.Y/10 + visibleBoardH)
 
+	// check if position is on the board and do nothing if it is out of bounds
 	if x < int(boardPos.X) || x >= int(boardPos.X)+visibleBoardW || y < int(boardPos.Y) || y >= int(boardPos.Y)+visibleBoardH {
-		// do nothing
-	} else if alive {
+		return
+	}
+
+	// change cell properties
+	if alive {
 		cells.Add(x, y, cellType)
 	} else {
 		cells.Delete(x, y)
