@@ -121,7 +121,5 @@ func (m *Manager) updateBuffer() {
 
 // swapBuffer will swap active cells with buffer.
 func (m *Manager) swapBuffer() {
-	temp := m.cells
 	m.cells = m.buffer
-	m.buffer = temp
 }
