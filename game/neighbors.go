@@ -1,11 +1,13 @@
 package game
 
 // countNeighbors will count the number of living neighbors surrounding a cell.
-func (m *Manager) countNeighbors(x, y int, dead func(x, y int)) (count, cross, plus, circle, dot int) {
-	for i := x - 1; i <= x+1; i++ {
-		for j := y - 1; j <= y+1; j++ {
-			if !(i == x && j == y) {
-				if cell, ok := m.cells.Retrieve(i, j); ok {
+func (m *Manager) countNeighbors(x, y int, trackDead bool) (count, cross, plus, circle, dot int) {
+	var pos Position
+
+	for pos.X = x - 1; pos.X <= x+1; pos.X++ {
+		for pos.Y = y - 1; pos.Y <= y+1; pos.Y++ {
+			if !(pos.X == x && pos.Y == y) {
+				if cell, ok := m.cells[pos]; ok {
 					switch cell {
 					case CellTypeCross:
 						cross++
@@ -16,8 +18,8 @@ func (m *Manager) countNeighbors(x, y int, dead func(x, y int)) (count, cross, p
 					case CellTypeDot:
 						dot++
 					}
-				} else if dead != nil {
-					dead(i, j)
+				} else if trackDead {
+					m.dead[pos] = CellTypeCross
 				}
 			}
 		}
