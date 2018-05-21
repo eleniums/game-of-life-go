@@ -6,7 +6,7 @@ import (
 	assert "github.com/stretchr/testify/require"
 )
 
-func Test_countNeighbors_Alive(t *testing.T) {
+func Test_Manager_countNeighbors_Alive(t *testing.T) {
 	testCases := []struct {
 		name string
 		x    int
@@ -72,7 +72,7 @@ func Test_countNeighbors_Type_Cross(t *testing.T) {
 	}
 }
 
-func Test_countNeighbors_Type_Plus(t *testing.T) {
+func Test_Manager_countNeighbors_Type_Plus(t *testing.T) {
 	testCases := []struct {
 		name string
 		x    int
@@ -105,7 +105,7 @@ func Test_countNeighbors_Type_Plus(t *testing.T) {
 	}
 }
 
-func Test_countNeighbors_Type_Circle(t *testing.T) {
+func Test_Manager_countNeighbors_Type_Circle(t *testing.T) {
 	testCases := []struct {
 		name string
 		x    int
@@ -138,7 +138,7 @@ func Test_countNeighbors_Type_Circle(t *testing.T) {
 	}
 }
 
-func Test_countNeighbors_Type_Dot(t *testing.T) {
+func Test_Manager_countNeighbors_Type_Dot(t *testing.T) {
 	testCases := []struct {
 		name string
 		x    int
@@ -171,7 +171,7 @@ func Test_countNeighbors_Type_Dot(t *testing.T) {
 	}
 }
 
-func Benchmark_countNeighbors(b *testing.B) {
+func Benchmark_Manager_countNeighbors(b *testing.B) {
 	b.Run("Best Case", func(b *testing.B) {
 		manager := NewManager()
 
