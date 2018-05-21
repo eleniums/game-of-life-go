@@ -18,6 +18,9 @@ const (
 	// dimensions of visible board space
 	visibleBoardW = 96
 	visibleBoardH = 96
+
+	// grid scrolling speed
+	scrollSpeed = 10.0
 )
 
 var (
@@ -57,11 +60,28 @@ func NewBoard() *Board {
 }
 
 // Update the board with any new mouse clicks.
-func (b *Board) Update(win *pixelgl.Window, cells game.Grid) {
-	if win.JustPressed(pixelgl.MouseButtonLeft) {
-		changeCell(cells, win.MousePosition(), true, SetCellType)
-	} else if win.JustPressed(pixelgl.MouseButtonRight) {
-		changeCell(cells, win.MousePosition(), false, SetCellType)
+func (b *Board) Update(win *pixelgl.Window, dt float64, running bool, cells game.Grid) {
+	// add or remove cells using mouse buttons
+	if !running {
+		if win.JustPressed(pixelgl.MouseButtonLeft) {
+			changeCell(cells, win.MousePosition(), true, SetCellType)
+		} else if win.JustPressed(pixelgl.MouseButtonRight) {
+			changeCell(cells, win.MousePosition(), false, SetCellType)
+		}
+	}
+
+	// scroll view of grid
+	if win.Pressed(pixelgl.KeyLeft) {
+		boardPos.X -= scrollSpeed * dt
+	}
+	if win.Pressed(pixelgl.KeyRight) {
+		boardPos.X += scrollSpeed * dt
+	}
+	if win.Pressed(pixelgl.KeyDown) {
+		boardPos.Y -= scrollSpeed * dt
+	}
+	if win.Pressed(pixelgl.KeyUp) {
+		boardPos.Y += scrollSpeed * dt
 	}
 }
 

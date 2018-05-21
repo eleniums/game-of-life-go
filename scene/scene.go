@@ -112,7 +112,7 @@ func New() *Scene {
 }
 
 // Update the scene.
-func (s *Scene) Update(win *pixelgl.Window) {
+func (s *Scene) Update(win *pixelgl.Window, dt float64) {
 	if s.bounds.W() != win.Bounds().W() || s.bounds.H() != win.Bounds().H() {
 		s.bounds = win.Bounds()
 
@@ -123,9 +123,7 @@ func (s *Scene) Update(win *pixelgl.Window) {
 		s.saveButton.SetPosition(pixel.V(s.bounds.Max.X-150-s.saveButton.Size().W()/2, s.bounds.Max.Y-760))
 	}
 
-	if !s.manager.Running() {
-		s.board.Update(win, s.manager.Cells())
-	}
+	s.board.Update(win, dt, s.manager.Running(), s.manager.Cells())
 
 	s.startButton.Update(win)
 	s.storeButton.Update(win)

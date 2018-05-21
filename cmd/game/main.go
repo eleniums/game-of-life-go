@@ -75,9 +75,13 @@ func run() {
 	second := time.Tick(time.Second)
 
 	// main update loop
+	last := time.Now()
 	for !win.Closed() {
+		dt := time.Since(last).Seconds()
+		last = time.Now()
+
 		// update all objects in the scene
-		scene.Update(win)
+		scene.Update(win, dt)
 
 		// draw all objects in the scene
 		scene.Draw(win)
