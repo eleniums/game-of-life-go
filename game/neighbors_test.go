@@ -39,7 +39,7 @@ func Test_Manager_countNeighbors_Alive(t *testing.T) {
 	}
 }
 
-func Test_countNeighbors_Type_Cross(t *testing.T) {
+func Test_Manager_countNeighbors_Type_Cross(t *testing.T) {
 	testCases := []struct {
 		name string
 		x    int

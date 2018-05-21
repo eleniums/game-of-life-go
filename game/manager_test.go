@@ -19,11 +19,6 @@ func Test_Manager_swapBuffer(t *testing.T) {
 	assert.False(t, ok)
 	_, ok = manager.cells.Retrieve(5, 5)
 	assert.True(t, ok)
-
-	_, ok = manager.buffer.Retrieve(25, 25)
-	assert.True(t, ok)
-	_, ok = manager.buffer.Retrieve(5, 5)
-	assert.False(t, ok)
 }
 
 func Test_Manager_updateBuffer(t *testing.T) {
