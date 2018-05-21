@@ -6,7 +6,7 @@ import (
 	assert "github.com/stretchr/testify/require"
 )
 
-func Test_CellGrid_CountNeighbors_Alive(t *testing.T) {
+func Test_Manager_countNeighbors_Alive(t *testing.T) {
 	testCases := []struct {
 		name string
 		x    int
@@ -24,22 +24,22 @@ func Test_CellGrid_CountNeighbors_Alive(t *testing.T) {
 		{"Lower Right", 6, 4, 3},
 	}
 
-	cells := NewCellGrid()
+	manager := NewManager()
 	for x := 4; x <= 6; x++ {
 		for y := 4; y <= 6; y++ {
-			cells[x][y].Alive = true
+			manager.cells.Add(x, y, CellTypeCross)
 		}
 	}
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			count, _, _, _, _ := cells.CountNeighbors(tc.x, tc.y)
+			count, _ := manager.countNeighbors(tc.x, tc.y, nil)
 			assert.Equal(t, tc.want, count)
 		})
 	}
 }
 
-func Test_CellGrid_CountNeighbors_Type_Cross(t *testing.T) {
+func Test_Manager_countNeighbors_Type_Cross(t *testing.T) {
 	testCases := []struct {
 		name string
 		x    int
@@ -57,23 +57,22 @@ func Test_CellGrid_CountNeighbors_Type_Cross(t *testing.T) {
 		{"Lower Right", 6, 4, 3},
 	}
 
-	cells := NewCellGrid()
+	manager := NewManager()
 	for x := 4; x <= 6; x++ {
 		for y := 4; y <= 6; y++ {
-			cells[x][y].Alive = true
-			cells[x][y].Type = CellTypeCross
+			manager.cells.Add(x, y, CellTypeCross)
 		}
 	}
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			_, cross, _, _, _ := cells.CountNeighbors(tc.x, tc.y)
-			assert.Equal(t, tc.want, cross)
+			_, types := manager.countNeighbors(tc.x, tc.y, nil)
+			assert.Equal(t, tc.want, types[CellTypeCross])
 		})
 	}
 }
 
-func Test_CellGrid_CountNeighbors_Type_Plus(t *testing.T) {
+func Test_Manager_countNeighbors_Type_Plus(t *testing.T) {
 	testCases := []struct {
 		name string
 		x    int
@@ -91,23 +90,22 @@ func Test_CellGrid_CountNeighbors_Type_Plus(t *testing.T) {
 		{"Lower Right", 6, 4, 3},
 	}
 
-	cells := NewCellGrid()
+	manager := NewManager()
 	for x := 4; x <= 6; x++ {
 		for y := 4; y <= 6; y++ {
-			cells[x][y].Alive = true
-			cells[x][y].Type = CellTypePlus
+			manager.cells.Add(x, y, CellTypePlus)
 		}
 	}
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			_, _, plus, _, _ := cells.CountNeighbors(tc.x, tc.y)
-			assert.Equal(t, tc.want, plus)
+			_, types := manager.countNeighbors(tc.x, tc.y, nil)
+			assert.Equal(t, tc.want, types[CellTypePlus])
 		})
 	}
 }
 
-func Test_CellGrid_CountNeighbors_Type_Circle(t *testing.T) {
+func Test_Manager_countNeighbors_Type_Circle(t *testing.T) {
 	testCases := []struct {
 		name string
 		x    int
@@ -125,23 +123,22 @@ func Test_CellGrid_CountNeighbors_Type_Circle(t *testing.T) {
 		{"Lower Right", 6, 4, 3},
 	}
 
-	cells := NewCellGrid()
+	manager := NewManager()
 	for x := 4; x <= 6; x++ {
 		for y := 4; y <= 6; y++ {
-			cells[x][y].Alive = true
-			cells[x][y].Type = CellTypeCircle
+			manager.cells.Add(x, y, CellTypeCircle)
 		}
 	}
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			_, _, _, circle, _ := cells.CountNeighbors(tc.x, tc.y)
-			assert.Equal(t, tc.want, circle)
+			_, types := manager.countNeighbors(tc.x, tc.y, nil)
+			assert.Equal(t, tc.want, types[CellTypeCircle])
 		})
 	}
 }
 
-func Test_CellGrid_CountNeighbors_Type_Dot(t *testing.T) {
+func Test_Manager_countNeighbors_Type_Dot(t *testing.T) {
 	testCases := []struct {
 		name string
 		x    int
@@ -159,58 +156,48 @@ func Test_CellGrid_CountNeighbors_Type_Dot(t *testing.T) {
 		{"Lower Right", 6, 4, 3},
 	}
 
-	cells := NewCellGrid()
+	manager := NewManager()
 	for x := 4; x <= 6; x++ {
 		for y := 4; y <= 6; y++ {
-			cells[x][y].Alive = true
-			cells[x][y].Type = CellTypeDot
+			manager.cells.Add(x, y, CellTypeDot)
 		}
 	}
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			_, _, _, _, dot := cells.CountNeighbors(tc.x, tc.y)
-			assert.Equal(t, tc.want, dot)
+			_, types := manager.countNeighbors(tc.x, tc.y, nil)
+			assert.Equal(t, tc.want, types[CellTypeDot])
 		})
 	}
 }
 
-func Benchmark_CellGrid_CountNeighbors(b *testing.B) {
+func Benchmark_Manager_countNeighbors(b *testing.B) {
 	b.Run("Best Case", func(b *testing.B) {
-		cells := NewCellGrid()
-
-		cells[4][5].Alive = false
-		cells[6][5].Alive = false
-		cells[5][6].Alive = false
-		cells[4][6].Alive = false
-		cells[6][6].Alive = false
-		cells[5][4].Alive = false
-		cells[4][4].Alive = false
-		cells[6][4].Alive = false
+		manager := NewManager()
 
 		b.ResetTimer()
 
 		for i := 0; i < b.N; i++ {
-			cells.CountNeighbors(5, 5)
+			manager.countNeighbors(5, 5, nil)
 		}
 	})
 
 	b.Run("Worst Case", func(b *testing.B) {
-		cells := NewCellGrid()
+		manager := NewManager()
 
-		cells[4][5].Alive = true
-		cells[6][5].Alive = true
-		cells[5][6].Alive = true
-		cells[4][6].Alive = true
-		cells[6][6].Alive = true
-		cells[5][4].Alive = true
-		cells[4][4].Alive = true
-		cells[6][4].Alive = true
+		manager.cells.Add(4, 5, CellTypeCross)
+		manager.cells.Add(6, 5, CellTypeCross)
+		manager.cells.Add(5, 6, CellTypeCross)
+		manager.cells.Add(4, 6, CellTypeCross)
+		manager.cells.Add(6, 6, CellTypeCross)
+		manager.cells.Add(5, 4, CellTypeCross)
+		manager.cells.Add(4, 4, CellTypeCross)
+		manager.cells.Add(6, 4, CellTypeCross)
 
 		b.ResetTimer()
 
 		for i := 0; i < b.N; i++ {
-			cells.CountNeighbors(5, 5)
+			manager.countNeighbors(5, 5, nil)
 		}
 	})
 }

@@ -21,64 +21,47 @@ var (
 )
 
 // determineType will determine the cell type based on the neighbors, using the ReproduceMethod.
-func determineType(cross, plus, circle, dot int) CellType {
+func determineType(types []int) CellType {
 	switch ReproduceMethod {
 	case ReproduceTypeMajorityWins:
-		return reproduceMajorityWins(cross, plus, circle, dot)
+		return reproduceMajorityWins(types)
 	case ReproduceTypeRandomPercentage:
-		return reproduceRandomPercentage(cross, plus, circle, dot)
+		return reproduceRandomPercentage(types)
 	default:
 		return CellTypeCross
 	}
 }
 
 // reproduceMajorityWins will determine cell type based on a majority of neighbors.
-func reproduceMajorityWins(cross, plus, circle, dot int) CellType {
-	if cross > 1 {
-		return CellTypeCross
-	} else if plus > 1 {
-		return CellTypePlus
-	} else if circle > 1 {
-		return CellTypeCircle
-	} else if dot > 1 {
-		return CellTypeDot
+func reproduceMajorityWins(types []int) CellType {
+	for i, v := range types {
+		if v > 1 {
+			return CellType(i)
+		}
 	}
 
-	if cross <= 0 {
-		return CellTypeCross
-	} else if plus <= 0 {
-		return CellTypePlus
-	} else if circle <= 0 {
-		return CellTypeCircle
-	} else if dot <= 0 {
-		return CellTypeDot
+	for i, v := range types {
+		if v <= 0 {
+			return CellType(i)
+		}
 	}
 
 	return CellTypeCross
 }
 
 // reproduceRandomPercentage will determine cell type by randomly picking one of the neighbors.
-func reproduceRandomPercentage(cross, plus, circle, dot int) CellType {
-	var types [3]CellType
+func reproduceRandomPercentage(types []int) CellType {
+	var random [3]CellType
 	index := 0
 
-	for i := 0; i < cross; i++ {
-		types[index] = CellTypeCross
-		index++
-	}
-	for i := 0; i < plus; i++ {
-		types[index] = CellTypePlus
-		index++
-	}
-	for i := 0; i < circle; i++ {
-		types[index] = CellTypeCircle
-		index++
-	}
-	for i := 0; i < dot; i++ {
-		types[index] = CellTypeDot
-		index++
+	for i, v := range types {
+		for j := 0; j < v; j++ {
+			random[index] = CellType(i)
+			index++
+		}
 	}
 
 	result := rand.Intn(3)
-	return types[result]
+
+	return random[result]
 }

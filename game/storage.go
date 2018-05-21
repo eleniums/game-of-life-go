@@ -13,18 +13,17 @@ type storage struct {
 }
 
 // save a grid to a file.
-func save(cells CellGrid, path string) error {
+func save(cells Grid, path string) error {
 	compact := []*storage{}
-	for x := range cells {
-		for y := range cells[x] {
-			if cells[x][y].Alive {
-				compact = append(compact, &storage{
-					Cell: cells[x][y],
-					X:    x,
-					Y:    y,
-				})
-			}
-		}
+	for k, v := range cells {
+		compact = append(compact, &storage{
+			Cell: &Cell{
+				Alive: true,
+				Type:  v,
+			},
+			X: k.X,
+			Y: k.Y,
+		})
 	}
 
 	data, err := json.Marshal(compact)
@@ -38,7 +37,7 @@ func save(cells CellGrid, path string) error {
 }
 
 // load a pattern from a file to a grid.
-func load(path string) (CellGrid, error) {
+func load(path string) (Grid, error) {
 	data, err := ioutil.ReadFile(path)
 	if err != nil {
 		return nil, err
@@ -47,9 +46,9 @@ func load(path string) (CellGrid, error) {
 	var compact []*storage
 	err = json.Unmarshal(data, &compact)
 
-	cells := NewCellGrid()
+	cells := NewGrid()
 	for _, v := range compact {
-		cells[v.X][v.Y] = v.Cell
+		cells.Add(v.X, v.Y, v.Cell.Type)
 	}
 
 	return cells, err

@@ -30,8 +30,9 @@ func Test_reproduceMajorityWins(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
+		types := []int{tc.cross, tc.plus, tc.circle, tc.dot}
 		t.Run(tc.name, func(t *testing.T) {
-			cellType := reproduceMajorityWins(tc.cross, tc.plus, tc.circle, tc.dot)
+			cellType := reproduceMajorityWins(types)
 			assert.Equal(t, tc.want, cellType)
 		})
 	}
@@ -53,8 +54,9 @@ func Test_reproduceRandomPercentage(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
+		types := []int{tc.cross, tc.plus, tc.circle, tc.dot}
 		t.Run(tc.name, func(t *testing.T) {
-			cellType := reproduceRandomPercentage(tc.cross, tc.plus, tc.circle, tc.dot)
+			cellType := reproduceRandomPercentage(types)
 			assert.Equal(t, tc.want, cellType)
 		})
 	}
@@ -73,9 +75,10 @@ func Benchmark_reproduceMajorityWins(b *testing.B) {
 	}
 
 	for _, bm := range benchmarks {
+		types := []int{bm.cross, bm.plus, bm.circle, bm.dot}
 		b.Run(bm.name, func(b *testing.B) {
 			for i := 0; i < b.N; i++ {
-				reproduceMajorityWins(bm.cross, bm.plus, bm.circle, bm.dot)
+				reproduceMajorityWins(types)
 			}
 		})
 	}
@@ -94,9 +97,10 @@ func Benchmark_reproduceRandomPercentage(b *testing.B) {
 	}
 
 	for _, bm := range benchmarks {
+		types := []int{bm.cross, bm.plus, bm.circle, bm.dot}
 		b.Run(bm.name, func(b *testing.B) {
 			for i := 0; i < b.N; i++ {
-				reproduceRandomPercentage(bm.cross, bm.plus, bm.circle, bm.dot)
+				reproduceRandomPercentage(types)
 			}
 		})
 	}

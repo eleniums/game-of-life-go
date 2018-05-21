@@ -11,9 +11,9 @@ var (
 
 // Manager controls the grid updates.
 type Manager struct {
-	cells   CellGrid
-	buffer  CellGrid
-	memory  CellGrid
+	cells   Grid
+	buffer  Grid
+	memory  Grid
 	running bool
 	ticker  *time.Ticker
 }
@@ -21,9 +21,9 @@ type Manager struct {
 // NewManager creates a new Manager.
 func NewManager() *Manager {
 	return &Manager{
-		cells:   NewCellGrid(),
-		buffer:  NewCellGrid(),
-		memory:  NewCellGrid(),
+		cells:   NewGrid(),
+		buffer:  NewGrid(),
+		memory:  NewGrid(),
 		running: false,
 	}
 }
@@ -88,7 +88,7 @@ func (m *Manager) Load(path string) error {
 }
 
 // Cells returns the grid.
-func (m *Manager) Cells() CellGrid {
+func (m *Manager) Cells() Grid {
 	return m.cells
 }
 
@@ -99,22 +99,28 @@ func (m *Manager) Running() bool {
 
 // updateBuffer will iterate over the grid and apply rules.
 func (m *Manager) updateBuffer() {
-	for x := range m.cells {
-		for y := range m.cells[x] {
-			neighbors, cross, plus, circle, dot := m.cells.CountNeighbors(x, y)
-			if m.cells[x][y].Alive {
-				m.buffer[x][y].Type = m.cells[x][y].Type
-			} else if neighbors == 3 {
-				m.buffer[x][y].Type = determineType(cross, plus, circle, dot)
+	m.buffer = NewGrid()
+
+	for k, v := range m.cells {
+		count, _ := m.countNeighbors(k.X, k.Y, func(pos Position) {
+			if _, ok := m.buffer[pos]; ok {
+				return
 			}
-			m.buffer[x][y].Alive = applyRules(m.cells[x][y].Alive, neighbors)
+
+			count, types := m.countNeighbors(pos.X, pos.Y, nil)
+
+			if applyRules(false, count) {
+				m.buffer[pos] = determineType(types)
+			}
+		})
+
+		if applyRules(true, count) {
+			m.buffer[k] = v
 		}
 	}
 }
 
 // swapBuffer will swap active cells with buffer.
 func (m *Manager) swapBuffer() {
-	temp := m.cells
 	m.cells = m.buffer
-	m.buffer = temp
 }
