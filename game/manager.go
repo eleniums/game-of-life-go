@@ -14,7 +14,6 @@ type Manager struct {
 	cells   Grid
 	buffer  Grid
 	memory  Grid
-	dead    Grid
 	running bool
 	ticker  *time.Ticker
 }
@@ -25,7 +24,6 @@ func NewManager() *Manager {
 		cells:   NewGrid(),
 		buffer:  NewGrid(),
 		memory:  NewGrid(),
-		dead:    NewGrid(),
 		running: false,
 	}
 }
@@ -102,19 +100,22 @@ func (m *Manager) Running() bool {
 // updateBuffer will iterate over the grid and apply rules.
 func (m *Manager) updateBuffer() {
 	m.buffer = NewGrid()
-	m.dead = NewGrid()
 
 	for k, v := range m.cells {
-		neighbors, _ := m.countNeighbors(k.X, k.Y, true)
-		if applyRules(true, neighbors) {
-			m.buffer[k] = v
-		}
-	}
+		count, _ := m.countNeighbors(k.X, k.Y, func(pos Position) {
+			if _, ok := m.buffer[pos]; ok {
+				return
+			}
 
-	for k := range m.dead {
-		neighbors, types := m.countNeighbors(k.X, k.Y, false)
-		if applyRules(false, neighbors) {
-			m.buffer[k] = determineType(types)
+			count, types := m.countNeighbors(pos.X, pos.Y, nil)
+
+			if applyRules(false, count) {
+				m.buffer[pos] = determineType(types)
+			}
+		})
+
+		if applyRules(true, count) {
+			m.buffer[k] = v
 		}
 	}
 }

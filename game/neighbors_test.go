@@ -33,7 +33,7 @@ func Test_countNeighbors_Alive(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			count, _ := manager.countNeighbors(tc.x, tc.y, false)
+			count, _ := manager.countNeighbors(tc.x, tc.y, nil)
 			assert.Equal(t, tc.want, count)
 		})
 	}
@@ -66,7 +66,7 @@ func Test_countNeighbors_Type_Cross(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			_, types := manager.countNeighbors(tc.x, tc.y, false)
+			_, types := manager.countNeighbors(tc.x, tc.y, nil)
 			assert.Equal(t, tc.want, types[CellTypeCross])
 		})
 	}
@@ -99,7 +99,7 @@ func Test_countNeighbors_Type_Plus(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			_, types := manager.countNeighbors(tc.x, tc.y, false)
+			_, types := manager.countNeighbors(tc.x, tc.y, nil)
 			assert.Equal(t, tc.want, types[CellTypePlus])
 		})
 	}
@@ -132,7 +132,7 @@ func Test_countNeighbors_Type_Circle(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			_, types := manager.countNeighbors(tc.x, tc.y, false)
+			_, types := manager.countNeighbors(tc.x, tc.y, nil)
 			assert.Equal(t, tc.want, types[CellTypeCircle])
 		})
 	}
@@ -165,7 +165,7 @@ func Test_countNeighbors_Type_Dot(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			_, types := manager.countNeighbors(tc.x, tc.y, false)
+			_, types := manager.countNeighbors(tc.x, tc.y, nil)
 			assert.Equal(t, tc.want, types[CellTypeDot])
 		})
 	}
@@ -178,7 +178,7 @@ func Benchmark_countNeighbors(b *testing.B) {
 		b.ResetTimer()
 
 		for i := 0; i < b.N; i++ {
-			manager.countNeighbors(5, 5, false)
+			manager.countNeighbors(5, 5, nil)
 		}
 	})
 
@@ -197,7 +197,7 @@ func Benchmark_countNeighbors(b *testing.B) {
 		b.ResetTimer()
 
 		for i := 0; i < b.N; i++ {
-			manager.countNeighbors(5, 5, false)
+			manager.countNeighbors(5, 5, nil)
 		}
 	})
 }

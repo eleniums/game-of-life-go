@@ -1,7 +1,7 @@
 package game
 
 // countNeighbors will count the number of living neighbors surrounding a cell.
-func (m *Manager) countNeighbors(x, y int, trackDead bool) (int, []int) {
+func (m *Manager) countNeighbors(x, y int, dead func(Position)) (int, []int) {
 	types := make([]int, 4)
 	count := 0
 
@@ -12,8 +12,8 @@ func (m *Manager) countNeighbors(x, y int, trackDead bool) (int, []int) {
 				if cell, ok := m.cells[pos]; ok {
 					count++
 					types[cell]++
-				} else if trackDead {
-					m.dead[pos] = CellTypeCross
+				} else if dead != nil {
+					dead(pos)
 				}
 			}
 		}
