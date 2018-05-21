@@ -143,9 +143,9 @@ func (b *Board) drawCells(t pixel.Target, cells game.Grid) {
 }
 
 // draw will draw a single cell to a batch at the given location.
-func draw(batch *pixel.Batch, tile *pixel.Sprite, x, y int) {
-	loc := pixel.V(tile.Frame().W()/2+tile.Frame().W()*float64(x), tile.Frame().H()/2+tile.Frame().H()*float64(y))
-	tile.Draw(batch, pixel.IM.Moved(loc))
+func draw(batch *pixel.Batch, sprite *pixel.Sprite, x, y int) {
+	loc := pixel.V(sprite.Frame().W()/2+sprite.Frame().W()*float64(x), sprite.Frame().H()/2+sprite.Frame().H()*float64(y))
+	sprite.Draw(batch, pixel.IM.Moved(loc))
 }
 
 // changeCell will switch a cell to a different state and type.
