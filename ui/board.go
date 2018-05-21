@@ -72,16 +72,16 @@ func (b *Board) Update(win *pixelgl.Window, dt float64, running bool, cells game
 
 	// scroll view of grid
 	if win.Pressed(pixelgl.KeyLeft) {
-		boardPos.X -= scrollSpeed * dt
-	}
-	if win.Pressed(pixelgl.KeyRight) {
 		boardPos.X += scrollSpeed * dt
 	}
+	if win.Pressed(pixelgl.KeyRight) {
+		boardPos.X -= scrollSpeed * dt
+	}
 	if win.Pressed(pixelgl.KeyDown) {
-		boardPos.Y -= scrollSpeed * dt
+		boardPos.Y += scrollSpeed * dt
 	}
 	if win.Pressed(pixelgl.KeyUp) {
-		boardPos.Y += scrollSpeed * dt
+		boardPos.Y -= scrollSpeed * dt
 	}
 }
 
