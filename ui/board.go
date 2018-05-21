@@ -127,13 +127,13 @@ func (b *Board) drawCells(t pixel.Target, cells game.Grid) {
 		}
 
 		switch v {
-		case 0:
+		case game.CellTypeCross:
 			draw(b.cellBatch, sprites.Cell1, k.X-visibleBoardW, k.Y-visibleBoardH)
-		case 1:
+		case game.CellTypePlus:
 			draw(b.cellBatch, sprites.Cell2, k.X-visibleBoardW, k.Y-visibleBoardH)
-		case 2:
+		case game.CellTypeCircle:
 			draw(b.cellBatch, sprites.Cell3, k.X-visibleBoardW, k.Y-visibleBoardH)
-		case 3:
+		case game.CellTypeDot:
 			draw(b.cellBatch, sprites.Cell4, k.X-visibleBoardW, k.Y-visibleBoardH)
 		default:
 		}
