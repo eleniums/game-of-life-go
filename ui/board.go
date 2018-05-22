@@ -20,7 +20,7 @@ const (
 	visibleBoardH = 96
 
 	// grid scrolling speed
-	scrollSpeed = 10.0
+	scrollSpeed = 20.0
 )
 
 var (
@@ -98,15 +98,19 @@ func (b *Board) drawGrass(t pixel.Target) {
 	// draw grass to batch
 	for x := range b.grassGrid {
 		for y := range b.grassGrid[x] {
+
+			xpos := float64(x)
+			ypos := float64(y)
+
 			switch b.grassGrid[x][y] {
 			case 0:
-				draw(b.grassBatch, sprites.Grass1, x, y)
+				draw(b.grassBatch, sprites.Grass1, xpos, ypos)
 			case 1:
-				draw(b.grassBatch, sprites.Grass2, x, y)
+				draw(b.grassBatch, sprites.Grass2, xpos, ypos)
 			case 2:
-				draw(b.grassBatch, sprites.Grass3, x, y)
+				draw(b.grassBatch, sprites.Grass3, xpos, ypos)
 			case 3:
-				draw(b.grassBatch, sprites.Grass4, x, y)
+				draw(b.grassBatch, sprites.Grass4, xpos, ypos)
 			default:
 			}
 		}
@@ -126,15 +130,18 @@ func (b *Board) drawCells(t pixel.Target, cells game.Grid) {
 			continue
 		}
 
+		xpos := float64(k.X) - boardPos.X
+		ypos := float64(k.Y) - boardPos.Y
+
 		switch v {
 		case game.CellTypeCross:
-			draw(b.cellBatch, sprites.Cell1, k.X-visibleBoardW, k.Y-visibleBoardH)
+			draw(b.cellBatch, sprites.Cell1, xpos, ypos)
 		case game.CellTypePlus:
-			draw(b.cellBatch, sprites.Cell2, k.X-visibleBoardW, k.Y-visibleBoardH)
+			draw(b.cellBatch, sprites.Cell2, xpos, ypos)
 		case game.CellTypeCircle:
-			draw(b.cellBatch, sprites.Cell3, k.X-visibleBoardW, k.Y-visibleBoardH)
+			draw(b.cellBatch, sprites.Cell3, xpos, ypos)
 		case game.CellTypeDot:
-			draw(b.cellBatch, sprites.Cell4, k.X-visibleBoardW, k.Y-visibleBoardH)
+			draw(b.cellBatch, sprites.Cell4, xpos, ypos)
 		default:
 		}
 	}
@@ -143,8 +150,8 @@ func (b *Board) drawCells(t pixel.Target, cells game.Grid) {
 }
 
 // draw will draw a single cell to a batch at the given location.
-func draw(batch *pixel.Batch, sprite *pixel.Sprite, x, y int) {
-	loc := pixel.V(sprite.Frame().W()/2+sprite.Frame().W()*float64(x), sprite.Frame().H()/2+sprite.Frame().H()*float64(y))
+func draw(batch *pixel.Batch, sprite *pixel.Sprite, x, y float64) {
+	loc := pixel.V(sprite.Frame().W()/2+sprite.Frame().W()*x, sprite.Frame().H()/2+sprite.Frame().H()*y)
 	sprite.Draw(batch, pixel.IM.Moved(loc))
 }
 
