@@ -83,6 +83,12 @@ func (b *Board) Update(win *pixelgl.Window, dt float64, running bool, cells game
 	if win.Pressed(pixelgl.KeyUp) {
 		boardPos.Y -= scrollSpeed * dt
 	}
+
+	// reset view of grid
+	if win.Pressed(pixelgl.KeySpace) {
+		boardPos.X = 96.0
+		boardPos.Y = 96.0
+	}
 }
 
 // Draw the board to the screen.
