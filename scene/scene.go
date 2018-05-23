@@ -143,6 +143,9 @@ func (s *Scene) Update(win *pixelgl.Window, dt float64) {
 func (s *Scene) Draw(win *pixelgl.Window) {
 	win.Clear(colornames.Black)
 
+	// board
+	s.board.Draw(win, s.manager.Cells())
+
 	// menu
 	sprites.Title.Draw(win, pixel.IM.Moved(pixel.V(win.Bounds().Max.X-sprites.Title.Frame().W()/2, win.Bounds().Max.Y-sprites.Title.Frame().H()/2)))
 	s.startButton.Draw(win)
@@ -155,9 +158,6 @@ func (s *Scene) Draw(win *pixelgl.Window) {
 	s.cell2Select.Draw(win)
 	s.cell3Select.Draw(win)
 	s.cell4Select.Draw(win)
-
-	// board
-	s.board.Draw(win, s.manager.Cells())
 }
 
 // Save the scene to file.
