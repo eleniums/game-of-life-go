@@ -16,8 +16,8 @@ const (
 	boardMaxY = 6
 
 	// dimensions of visible board space
-	visibleBoardW = 96
-	visibleBoardH = 96
+	visibleBoardW = 97
+	visibleBoardH = 97
 
 	// grid scrolling speed
 	scrollSpeed = 20.0
@@ -163,8 +163,8 @@ func draw(batch *pixel.Batch, sprite *pixel.Sprite, x, y float64) {
 
 // changeCell will switch a cell to a different state and type.
 func changeCell(cells game.Grid, pos pixel.Vec, alive bool, cellType game.CellType) {
-	x := int(pos.X/10 + visibleBoardW)
-	y := int(pos.Y/10 + visibleBoardH)
+	x := int(pos.X/10 + boardPos.X)
+	y := int(pos.Y/10 + boardPos.Y)
 
 	// check if position is on the board and do nothing if it is out of bounds
 	if x < int(boardPos.X) || x >= int(boardPos.X)+visibleBoardW || y < int(boardPos.Y) || y >= int(boardPos.Y)+visibleBoardH {
