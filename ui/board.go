@@ -1,6 +1,7 @@
 package ui
 
 import (
+	"math"
 	"math/rand"
 
 	"github.com/eleniums/game-of-life-go/assets"
@@ -12,8 +13,8 @@ import (
 
 const (
 	// dimensions of grass tiles
-	boardMaxX = 6
-	boardMaxY = 6
+	boardMaxX = 8
+	boardMaxY = 8
 
 	// dimensions of visible board space
 	visibleBoardW = 97
@@ -101,12 +102,39 @@ func (b *Board) Draw(t pixel.Target, cells game.Grid) {
 func (b *Board) drawGrass(t pixel.Target) {
 	b.grassBatch.Clear()
 
-	// draw grass to batch
-	for x := range b.grassGrid {
-		for y := range b.grassGrid[x] {
+	normW := boardMaxX * sprites.Grass1.Frame().W()
+	normH := boardMaxY * sprites.Grass1.Frame().H()
 
-			xpos := float64(x)
-			ypos := float64(y)
+	normX := math.Mod(boardPos.X, normW)
+	if normX < 0 {
+		normX += normW
+	}
+
+	normY := math.Mod(boardPos.Y, normH)
+	if normY < 0 {
+		normY += normH
+	}
+
+	x := int(normX) / 16 % boardMaxX
+	y := int(normY) / 16 % boardMaxY
+
+	// draw grass to batch
+	for i := 0; i < boardMaxX; i++ {
+		if x >= boardMaxX {
+			x = 0
+		} else if x < 0 {
+			x = boardMaxX - 1
+		}
+
+		for j := 0; j < boardMaxY; j++ {
+			if y >= boardMaxY {
+				y = 0
+			} else if y < 0 {
+				y = boardMaxY - 1
+			}
+
+			xpos := float64(i-1) - math.Mod(normX, 16)/16
+			ypos := float64(j-1) - math.Mod(normY, 16)/16
 
 			switch b.grassGrid[x][y] {
 			case 0:
@@ -119,7 +147,11 @@ func (b *Board) drawGrass(t pixel.Target) {
 				draw(b.grassBatch, sprites.Grass4, xpos, ypos)
 			default:
 			}
+
+			y++
 		}
+
+		x++
 	}
 
 	b.grassBatch.Draw(t)
