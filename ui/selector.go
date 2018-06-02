@@ -29,14 +29,30 @@ func NewSelector(position pixel.Vec, image *pixel.Sprite, action func(selector *
 		action:    action,
 	}
 
-	selector.fill = NewRectangle(selector.position, selector.position.Add(pixel.V(selector.size.W(), selector.size.H())), selector.fillColor)
+	selector.SetPosition(position)
 
 	return selector
+}
+
+// SetPosition sets the position of the selector.
+func (s *Selector) SetPosition(position pixel.Vec) {
+	s.position = position
+	s.redraw()
 }
 
 // Selected sets the state as selected or not selected.
 func (s *Selector) Selected(selected bool) {
 	s.selected = selected
+}
+
+// Position returns the position of the selector.
+func (s *Selector) Position() pixel.Vec {
+	return s.position
+}
+
+// Size returns the size of the selector.
+func (s *Selector) Size() pixel.Rect {
+	return s.size
 }
 
 // Draw the selector to the screen.
@@ -61,4 +77,9 @@ func (s *Selector) Update(win *pixelgl.Window) {
 			s.action(s)
 		}
 	}
+}
+
+// redraw will set the properties necessary to draw the selector at a different position.
+func (s *Selector) redraw() {
+	s.fill = NewRectangle(s.position, s.position.Add(pixel.V(s.size.W(), s.size.H())), s.fillColor)
 }

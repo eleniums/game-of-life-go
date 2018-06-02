@@ -130,6 +130,11 @@ func (s *Scene) Update(win *pixelgl.Window, dt float64) {
 		s.resetButton.SetPosition(pixel.V(s.bounds.Max.X-150-s.resetButton.Size().W()/2, s.bounds.Max.Y-560))
 		s.clearButton.SetPosition(pixel.V(s.bounds.Max.X-150-s.clearButton.Size().W()/2, s.bounds.Max.Y-660))
 		s.saveButton.SetPosition(pixel.V(s.bounds.Max.X-150-s.saveButton.Size().W()/2, s.bounds.Max.Y-760))
+
+		s.cell1Select.SetPosition(pixel.V(s.bounds.Max.X-185-s.cell1Select.Size().W()/2, s.bounds.Max.Y-840))
+		s.cell2Select.SetPosition(pixel.V(s.bounds.Max.X-115-s.cell2Select.Size().W()/2, s.bounds.Max.Y-840))
+		s.cell3Select.SetPosition(pixel.V(s.bounds.Max.X-185-s.cell3Select.Size().W()/2, s.bounds.Max.Y-910))
+		s.cell4Select.SetPosition(pixel.V(s.bounds.Max.X-115-s.cell4Select.Size().W()/2, s.bounds.Max.Y-910))
 	}
 
 	s.board.Update(win, dt, s.manager.Running(), s.manager.Cells())
