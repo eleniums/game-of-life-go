@@ -1,10 +1,8 @@
 package scene
 
 import (
-	"fmt"
 	"image/color"
 	"log"
-	"os"
 
 	"github.com/eleniums/game-of-life-go/game"
 	"github.com/eleniums/game-of-life-go/sprites"
@@ -13,11 +11,6 @@ import (
 	"github.com/faiface/pixel/imdraw"
 	"github.com/faiface/pixel/pixelgl"
 	"golang.org/x/image/colornames"
-)
-
-const (
-	// PatternFolder is the folder where saved patterns are located.
-	PatternFolder = "testdata"
 )
 
 var (
@@ -176,24 +169,16 @@ func (s *Scene) Draw(win *pixelgl.Window) {
 }
 
 // Save the scene to file.
-func (s *Scene) Save(pattern string) {
-	if _, err := os.Stat(PatternFolder); os.IsNotExist(err) {
-		err := os.Mkdir(PatternFolder, os.ModePerm)
-		if err != nil {
-			log.Printf("error creating pattern directory: %v", err)
-			return
-		}
-	}
-
-	err := s.manager.Save(fmt.Sprintf("%s/%s", PatternFolder, pattern))
+func (s *Scene) Save(path string) {
+	err := s.manager.Save(path)
 	if err != nil {
 		log.Printf("error saving pattern: %v", err)
 	}
 }
 
 // Load a pattern from file.
-func (s *Scene) Load(pattern string) {
-	err := s.manager.Load(fmt.Sprintf("%s/%s", PatternFolder, pattern))
+func (s *Scene) Load(path string) {
+	err := s.manager.Load(path)
 	if err != nil {
 		log.Printf("error loading pattern: %v", err)
 	}

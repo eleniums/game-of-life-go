@@ -29,7 +29,7 @@ var (
 	SetCellType = game.CellTypeCross
 
 	// lower left corner of visible space
-	boardPos = pixel.V(96.0, 96.0)
+	boardPos = pixel.V(0.0, 0.0)
 )
 
 // Board contains batches for drawing the grass and cells.
@@ -87,8 +87,8 @@ func (b *Board) Update(win *pixelgl.Window, dt float64, running bool, cells game
 
 	// reset view of grid
 	if win.Pressed(pixelgl.KeySpace) {
-		boardPos.X = 96.0
-		boardPos.Y = 96.0
+		boardPos.X = 0.0
+		boardPos.Y = 0.0
 	}
 }
 
