@@ -2,6 +2,7 @@ package scene
 
 import (
 	"fmt"
+	"image/color"
 	"log"
 	"os"
 
@@ -9,6 +10,7 @@ import (
 	"github.com/eleniums/game-of-life-go/sprites"
 	"github.com/eleniums/game-of-life-go/ui"
 	"github.com/faiface/pixel"
+	"github.com/faiface/pixel/imdraw"
 	"github.com/faiface/pixel/pixelgl"
 	"golang.org/x/image/colornames"
 )
@@ -16,6 +18,10 @@ import (
 const (
 	// PatternFolder is the folder where saved patterns are located.
 	PatternFolder = "testdata"
+)
+
+var (
+	green = color.RGBA{R: 27, G: 61, B: 0}
 )
 
 // Scene represents an entire scene in the game.
@@ -31,6 +37,7 @@ type Scene struct {
 	cell2Select *ui.Selector
 	cell3Select *ui.Selector
 	cell4Select *ui.Selector
+	menuBack    *imdraw.IMDraw
 	bounds      pixel.Rect
 }
 
@@ -112,20 +119,25 @@ func New() *Scene {
 }
 
 // Update the scene.
-func (s *Scene) Update(win *pixelgl.Window) {
+func (s *Scene) Update(win *pixelgl.Window, dt float64) {
 	if s.bounds.W() != win.Bounds().W() || s.bounds.H() != win.Bounds().H() {
 		s.bounds = win.Bounds()
+
+		s.menuBack = ui.NewRectangle(pixel.V(s.bounds.W()-300, 0), pixel.V(s.bounds.W(), s.bounds.H()), colornames.Black)
 
 		s.startButton.SetPosition(pixel.V(s.bounds.Max.X-150-s.startButton.Size().W()/2, s.bounds.Max.Y-360))
 		s.storeButton.SetPosition(pixel.V(s.bounds.Max.X-150-s.storeButton.Size().W()/2, s.bounds.Max.Y-460))
 		s.resetButton.SetPosition(pixel.V(s.bounds.Max.X-150-s.resetButton.Size().W()/2, s.bounds.Max.Y-560))
 		s.clearButton.SetPosition(pixel.V(s.bounds.Max.X-150-s.clearButton.Size().W()/2, s.bounds.Max.Y-660))
 		s.saveButton.SetPosition(pixel.V(s.bounds.Max.X-150-s.saveButton.Size().W()/2, s.bounds.Max.Y-760))
+
+		s.cell1Select.SetPosition(pixel.V(s.bounds.Max.X-185-s.cell1Select.Size().W()/2, s.bounds.Max.Y-840))
+		s.cell2Select.SetPosition(pixel.V(s.bounds.Max.X-115-s.cell2Select.Size().W()/2, s.bounds.Max.Y-840))
+		s.cell3Select.SetPosition(pixel.V(s.bounds.Max.X-185-s.cell3Select.Size().W()/2, s.bounds.Max.Y-910))
+		s.cell4Select.SetPosition(pixel.V(s.bounds.Max.X-115-s.cell4Select.Size().W()/2, s.bounds.Max.Y-910))
 	}
 
-	if !s.manager.Running() {
-		s.board.Update(win, s.manager.Cells())
-	}
+	s.board.Update(win, dt, s.manager.Running(), s.manager.Cells())
 
 	s.startButton.Update(win)
 	s.storeButton.Update(win)
@@ -143,9 +155,13 @@ func (s *Scene) Update(win *pixelgl.Window) {
 
 // Draw the scene.
 func (s *Scene) Draw(win *pixelgl.Window) {
-	win.Clear(colornames.Black)
+	win.Clear(green)
+
+	// board
+	s.board.Draw(win, s.manager.Cells())
 
 	// menu
+	s.menuBack.Draw(win)
 	sprites.Title.Draw(win, pixel.IM.Moved(pixel.V(win.Bounds().Max.X-sprites.Title.Frame().W()/2, win.Bounds().Max.Y-sprites.Title.Frame().H()/2)))
 	s.startButton.Draw(win)
 	s.storeButton.Draw(win)
@@ -157,9 +173,6 @@ func (s *Scene) Draw(win *pixelgl.Window) {
 	s.cell2Select.Draw(win)
 	s.cell3Select.Draw(win)
 	s.cell4Select.Draw(win)
-
-	// board
-	s.board.Draw(win, s.manager.Cells())
 }
 
 // Save the scene to file.
