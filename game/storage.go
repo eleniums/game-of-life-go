@@ -7,7 +7,7 @@ import (
 
 // storage defines the type used to store a cell in a file.
 type storage struct {
-	Cell *Cell
+	Cell CellType
 	X    int
 	Y    int
 }
@@ -17,12 +17,9 @@ func save(cells Grid, path string) error {
 	compact := []*storage{}
 	for k, v := range cells {
 		compact = append(compact, &storage{
-			Cell: &Cell{
-				Alive: true,
-				Type:  v,
-			},
-			X: k.X,
-			Y: k.Y,
+			Cell: v,
+			X:    k.X,
+			Y:    k.Y,
 		})
 	}
 
@@ -48,7 +45,7 @@ func load(path string) (Grid, error) {
 
 	cells := NewGrid()
 	for _, v := range compact {
-		cells.Add(v.X, v.Y, v.Cell.Type)
+		cells.Add(v.X, v.Y, v.Cell)
 	}
 
 	return cells, err
