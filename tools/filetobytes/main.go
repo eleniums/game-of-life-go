@@ -7,7 +7,7 @@ import (
 )
 
 // Tool for converting a file to a byte array.
-// Usage: go run filetobytes.go <somefile.png>
+// Usage: go run main.go <somefile.png>
 func main() {
 	path := os.Args[1]
 
