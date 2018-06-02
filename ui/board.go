@@ -102,6 +102,7 @@ func (b *Board) Draw(t pixel.Target, cells game.Grid) {
 func (b *Board) drawGrass(t pixel.Target) {
 	b.grassBatch.Clear()
 
+	// use values normalized to the size of the board
 	normW := boardMaxX * sprites.Grass1.Frame().W()
 	normH := boardMaxY * sprites.Grass1.Frame().H()
 
@@ -115,28 +116,18 @@ func (b *Board) drawGrass(t pixel.Target) {
 		normY += normH
 	}
 
-	x := int(normX) / 16 % boardMaxX
-	y := int(normY) / 16 % boardMaxY
+	// get starting grassGrid coordinates
+	tileX := int(normX) / 16 % boardMaxX
+	tileY := int(normY) / 16 % boardMaxY
 
-	// draw grass to batch
 	for i := 0; i < boardMaxX; i++ {
-		if x >= boardMaxX {
-			x = 0
-		} else if x < 0 {
-			x = boardMaxX - 1
-		}
-
 		for j := 0; j < boardMaxY; j++ {
-			if y >= boardMaxY {
-				y = 0
-			} else if y < 0 {
-				y = boardMaxY - 1
-			}
 
 			xpos := float64(i-1) - math.Mod(normX, 16)/16
 			ypos := float64(j-1) - math.Mod(normY, 16)/16
 
-			switch b.grassGrid[x][y] {
+			// draw grass to batch
+			switch b.grassGrid[tileX][tileY] {
 			case 0:
 				draw(b.grassBatch, sprites.Grass1, xpos, ypos)
 			case 1:
@@ -148,10 +139,16 @@ func (b *Board) drawGrass(t pixel.Target) {
 			default:
 			}
 
-			y++
+			tileY++
+			if tileY >= boardMaxY {
+				tileY = 0
+			}
 		}
 
-		x++
+		tileX++
+		if tileX >= boardMaxX {
+			tileX = 0
+		}
 	}
 
 	b.grassBatch.Draw(t)
