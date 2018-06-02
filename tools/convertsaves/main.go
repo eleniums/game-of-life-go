@@ -59,8 +59,8 @@ func save(cells []*storageOld, path string) error {
 	for _, v := range cells {
 		compact = append(compact, &storageNew{
 			Cell: v.Cell.Type,
-			X:    v.X,
-			Y:    v.Y,
+			X:    v.X - 96,
+			Y:    v.Y - 96,
 		})
 	}
 
