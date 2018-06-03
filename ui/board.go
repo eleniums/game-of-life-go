@@ -14,12 +14,8 @@ import (
 
 const (
 	// default dimensions of grass tiles
-	defaultBoardMaxX = 8
-	defaultBoardMaxY = 8
-
-	// default dimensions of visible board space
-	defaultVisibleBoardW = 97
-	defaultVisibleBoardH = 97
+	defaultGrassW = 8
+	defaultGrassH = 8
 
 	// grid scrolling speed
 	scrollSpeed = 20.0
@@ -28,17 +24,6 @@ const (
 var (
 	// SetCellType is the type of cell to place when the grid is clicked.
 	SetCellType = game.CellTypeCross
-
-	// dimensions of grass tiles
-	boardMaxX = defaultBoardMaxX
-	boardMaxY = defaultBoardMaxY
-
-	// dimensions of visible board space
-	visibleBoardW = defaultVisibleBoardW
-	visibleBoardH = defaultVisibleBoardH
-
-	// lower left corner of visible space
-	boardPos = pixel.V(0.0, 0.0)
 )
 
 // Board contains batches for drawing the grass and cells.
@@ -46,6 +31,17 @@ type Board struct {
 	grassGrid  [][]int
 	grassBatch *pixel.Batch
 	cellBatch  *pixel.Batch
+
+	// dimensions of grass tiles
+	grassW int
+	grassH int
+
+	// dimensions of visible cells
+	cellW int
+	cellH int
+
+	// lower left corner of visible space
+	pos pixel.Vec
 }
 
 // NewBoard creates a new board.
@@ -54,10 +50,10 @@ func NewBoard() *Board {
 	cellBatch := pixel.NewBatch(&pixel.TrianglesData{}, assets.CellMap)
 
 	// randomize background tiles
-	grassGrid := make([][]int, defaultBoardMaxX)
-	for x := 0; x < defaultBoardMaxX; x++ {
-		grassGrid[x] = make([]int, defaultBoardMaxY)
-		for y := 0; y < defaultBoardMaxY; y++ {
+	grassGrid := make([][]int, defaultGrassW)
+	for x := 0; x < defaultGrassW; x++ {
+		grassGrid[x] = make([]int, defaultGrassH)
+		for y := 0; y < defaultGrassH; y++ {
 			grassGrid[x][y] = rand.Intn(4)
 		}
 	}
@@ -66,6 +62,7 @@ func NewBoard() *Board {
 		grassGrid:  grassGrid,
 		grassBatch: grassBatch,
 		cellBatch:  cellBatch,
+		pos:        pixel.V(0.0, 0.0),
 	}
 }
 
@@ -74,30 +71,30 @@ func (b *Board) Update(win *pixelgl.Window, dt float64, running bool, cells game
 	// add or remove cells using mouse buttons
 	if !running {
 		if win.JustPressed(pixelgl.MouseButtonLeft) {
-			changeCell(cells, win.MousePosition(), true, SetCellType)
+			b.changeCell(cells, win.MousePosition(), true, SetCellType)
 		} else if win.JustPressed(pixelgl.MouseButtonRight) {
-			changeCell(cells, win.MousePosition(), false, SetCellType)
+			b.changeCell(cells, win.MousePosition(), false, SetCellType)
 		}
 	}
 
 	// scroll view of grid
 	if win.Pressed(pixelgl.KeyLeft) {
-		boardPos.X -= scrollSpeed * dt
+		b.pos.X -= scrollSpeed * dt
 	}
 	if win.Pressed(pixelgl.KeyRight) {
-		boardPos.X += scrollSpeed * dt
+		b.pos.X += scrollSpeed * dt
 	}
 	if win.Pressed(pixelgl.KeyDown) {
-		boardPos.Y -= scrollSpeed * dt
+		b.pos.Y -= scrollSpeed * dt
 	}
 	if win.Pressed(pixelgl.KeyUp) {
-		boardPos.Y += scrollSpeed * dt
+		b.pos.Y += scrollSpeed * dt
 	}
 
 	// reset view of grid
 	if win.Pressed(pixelgl.KeySpace) {
-		boardPos.X = 0.0
-		boardPos.Y = 0.0
+		b.pos.X = 0.0
+		b.pos.Y = 0.0
 	}
 }
 
@@ -113,19 +110,19 @@ func (b *Board) Resize(w, h float64) {
 	log.Printf("Resizing to w: %v, h: %v\n", w, h)
 
 	// expand viewable area for cells
-	visibleBoardW = int(math.Ceil((w-300)/sprites.Cell1.Frame().W())) + 1
-	visibleBoardH = int(math.Ceil(h/sprites.Cell1.Frame().H())) + 1
+	b.cellW = int(math.Ceil((w-300)/sprites.Cell1.Frame().W())) + 1
+	b.cellH = int(math.Ceil(h/sprites.Cell1.Frame().H())) + 1
 
 	// expand viewable area for grass
-	boardMaxX = int(math.Ceil(((w-300)/sprites.Grass1.Frame().W()+2)/defaultBoardMaxX)) * defaultBoardMaxX
-	boardMaxY = int(math.Ceil((h/sprites.Grass1.Frame().H()+2)/defaultBoardMaxY)) * defaultBoardMaxY
+	b.grassW = int(math.Ceil(((w-300)/sprites.Grass1.Frame().W()+2)/defaultGrassW)) * defaultGrassW
+	b.grassH = int(math.Ceil((h/sprites.Grass1.Frame().H()+2)/defaultGrassH)) * defaultGrassH
 
 	// expand grid size
-	grassGrid := make([][]int, boardMaxX)
-	for x := 0; x < boardMaxX; x++ {
-		grassGrid[x] = make([]int, boardMaxY)
-		for y := 0; y < boardMaxY; y++ {
-			grassGrid[x][y] = b.grassGrid[x%defaultBoardMaxX][y%defaultBoardMaxY]
+	grassGrid := make([][]int, b.grassW)
+	for x := 0; x < b.grassW; x++ {
+		grassGrid[x] = make([]int, b.grassH)
+		for y := 0; y < b.grassH; y++ {
+			grassGrid[x][y] = b.grassGrid[x%defaultGrassW][y%defaultGrassH]
 		}
 	}
 	b.grassGrid = grassGrid
@@ -136,25 +133,25 @@ func (b *Board) drawGrass(t pixel.Target) {
 	b.grassBatch.Clear()
 
 	// use values normalized to the size of the board
-	normW := float64(boardMaxX) * sprites.Grass1.Frame().W()
-	normH := float64(boardMaxY) * sprites.Grass1.Frame().H()
+	normW := float64(b.grassW) * sprites.Grass1.Frame().W()
+	normH := float64(b.grassH) * sprites.Grass1.Frame().H()
 
-	normX := math.Mod(boardPos.X, normW)
+	normX := math.Mod(b.pos.X, normW)
 	if normX < 0 {
 		normX += normW
 	}
 
-	normY := math.Mod(boardPos.Y, normH)
+	normY := math.Mod(b.pos.Y, normH)
 	if normY < 0 {
 		normY += normH
 	}
 
 	// get starting grassGrid coordinates
-	tileX := int(normX) / 16 % boardMaxX
-	tileY := int(normY) / 16 % boardMaxY
+	tileX := int(normX) / 16 % b.grassW
+	tileY := int(normY) / 16 % b.grassH
 
-	for i := 0; i < boardMaxX; i++ {
-		for j := 0; j < boardMaxY; j++ {
+	for i := 0; i < b.grassW; i++ {
+		for j := 0; j < b.grassH; j++ {
 
 			xpos := float64(i-1) - math.Mod(normX, 16)/16
 			ypos := float64(j-1) - math.Mod(normY, 16)/16
@@ -173,13 +170,13 @@ func (b *Board) drawGrass(t pixel.Target) {
 			}
 
 			tileY++
-			if tileY >= boardMaxY {
+			if tileY >= b.grassH {
 				tileY = 0
 			}
 		}
 
 		tileX++
-		if tileX >= boardMaxX {
+		if tileX >= b.grassW {
 			tileX = 0
 		}
 	}
@@ -194,12 +191,12 @@ func (b *Board) drawCells(t pixel.Target, cells game.Grid) {
 	// draw cells to batch
 	for k, v := range cells {
 		// check if cell is visible and skip if it is not visible
-		if k.X < int(boardPos.X) || k.Y < int(boardPos.Y) || k.X >= int(boardPos.X)+visibleBoardW || k.Y >= int(boardPos.Y)+visibleBoardH {
+		if k.X < int(b.pos.X) || k.Y < int(b.pos.Y) || k.X >= int(b.pos.X)+b.cellW || k.Y >= int(b.pos.Y)+b.cellH {
 			continue
 		}
 
-		xpos := float64(k.X) - boardPos.X
-		ypos := float64(k.Y) - boardPos.Y
+		xpos := float64(k.X) - b.pos.X
+		ypos := float64(k.Y) - b.pos.Y
 
 		switch v {
 		case game.CellTypeCross:
@@ -224,12 +221,12 @@ func draw(batch *pixel.Batch, sprite *pixel.Sprite, x, y float64) {
 }
 
 // changeCell will switch a cell to a different state and type.
-func changeCell(cells game.Grid, pos pixel.Vec, alive bool, cellType game.CellType) {
-	x := int(pos.X/10 + boardPos.X)
-	y := int(pos.Y/10 + boardPos.Y)
+func (b *Board) changeCell(cells game.Grid, pos pixel.Vec, alive bool, cellType game.CellType) {
+	x := int(pos.X/10 + b.pos.X)
+	y := int(pos.Y/10 + b.pos.Y)
 
 	// check if position is on the board and do nothing if it is out of bounds
-	if x < int(boardPos.X) || x >= int(boardPos.X)+visibleBoardW || y < int(boardPos.Y) || y >= int(boardPos.Y)+visibleBoardH {
+	if x < int(b.pos.X) || x >= int(b.pos.X)+b.cellW || y < int(b.pos.Y) || y >= int(b.pos.Y)+b.cellH {
 		return
 	}
 
