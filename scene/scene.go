@@ -174,7 +174,7 @@ func (s *Scene) Draw(win *pixelgl.Window) {
 func (s *Scene) Save(path string) {
 	err := s.manager.Save(path)
 	if err != nil {
-		log.Printf("error saving pattern: %v", err)
+		log.Printf("Error saving pattern: %v", err)
 	}
 }
 
@@ -182,6 +182,6 @@ func (s *Scene) Save(path string) {
 func (s *Scene) Load(path string) {
 	err := s.manager.Load(path)
 	if err != nil {
-		log.Printf("error loading pattern: %v", err)
+		log.Printf("Error loading pattern: %v", err)
 	}
 }

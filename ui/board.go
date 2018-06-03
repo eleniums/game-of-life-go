@@ -1,7 +1,7 @@
 package ui
 
 import (
-	"fmt"
+	"log"
 	"math"
 	"math/rand"
 
@@ -110,19 +110,15 @@ func (b *Board) Draw(t pixel.Target, cells game.Grid) {
 // Resize the board with new dimensions.
 func (b *Board) Resize(w, h float64) {
 
-	fmt.Printf("Resizing to w: %v, h: %v\n", w, h)
+	log.Printf("Resizing to w: %v, h: %v\n", w, h)
 
 	// expand viewable area for cells
 	visibleBoardW = int(math.Ceil((w-300)/sprites.Cell1.Frame().W())) + 1
 	visibleBoardH = int(math.Ceil(h/sprites.Cell1.Frame().H())) + 1
 
-	fmt.Printf("visibleBoard: (%v, %v)\n", visibleBoardW, visibleBoardH)
-
 	// expand viewable area for grass
 	boardMaxX = int(math.Ceil(((w-300)/sprites.Grass1.Frame().W()+2)/defaultBoardMaxX)) * defaultBoardMaxX
 	boardMaxY = int(math.Ceil((h/sprites.Grass1.Frame().H()+2)/defaultBoardMaxY)) * defaultBoardMaxY
-
-	fmt.Printf("boardMax: (%v, %v)\n", boardMaxX, boardMaxY)
 
 	// expand grid size
 	grassGrid := make([][]int, boardMaxX)

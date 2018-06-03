@@ -2,8 +2,8 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
+	"log"
 	"os"
 
 	"github.com/eleniums/game-of-life-go/game"
@@ -14,15 +14,19 @@ import (
 func main() {
 	path := os.Args[1]
 
+	log.Printf("File path: %s", path)
+
 	cells, err := load(path)
 	if err != nil {
-		panic(fmt.Sprintf("unable to load file at %s: %v", path, err))
+		log.Fatalf("Unable to load file: %v", err)
 	}
 
 	err = save(cells, path)
 	if err != nil {
-		panic(fmt.Sprintf("unable to save file at %s: %v", path, err))
+		log.Fatalf("Unable to save file: %v", err)
 	}
+
+	log.Println("Converted save file to new format")
 }
 
 type cell struct {
