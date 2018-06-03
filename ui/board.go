@@ -1,6 +1,7 @@
 package ui
 
 import (
+	"fmt"
 	"math"
 	"math/rand"
 
@@ -12,13 +13,13 @@ import (
 )
 
 const (
-	// dimensions of grass tiles
-	boardMaxX = 8
-	boardMaxY = 8
+	// default dimensions of grass tiles
+	defaultBoardMaxX = 8
+	defaultBoardMaxY = 8
 
-	// dimensions of visible board space
-	visibleBoardW = 97
-	visibleBoardH = 97
+	// default dimensions of visible board space
+	defaultVisibleBoardW = 97
+	defaultVisibleBoardH = 97
 
 	// grid scrolling speed
 	scrollSpeed = 20.0
@@ -27,6 +28,14 @@ const (
 var (
 	// SetCellType is the type of cell to place when the grid is clicked.
 	SetCellType = game.CellTypeCross
+
+	// dimensions of grass tiles
+	boardMaxX = defaultBoardMaxX
+	boardMaxY = defaultBoardMaxY
+
+	// dimensions of visible board space
+	visibleBoardW = defaultVisibleBoardW
+	visibleBoardH = defaultVisibleBoardH
 
 	// lower left corner of visible space
 	boardPos = pixel.V(0.0, 0.0)
@@ -45,10 +54,10 @@ func NewBoard() *Board {
 	cellBatch := pixel.NewBatch(&pixel.TrianglesData{}, assets.CellMap)
 
 	// randomize background tiles
-	grassGrid := make([][]int, boardMaxX)
-	for x := 0; x < boardMaxX; x++ {
-		grassGrid[x] = make([]int, boardMaxY)
-		for y := 0; y < boardMaxY; y++ {
+	grassGrid := make([][]int, defaultBoardMaxX)
+	for x := 0; x < defaultBoardMaxX; x++ {
+		grassGrid[x] = make([]int, defaultBoardMaxY)
+		for y := 0; y < defaultBoardMaxY; y++ {
 			grassGrid[x][y] = rand.Intn(4)
 		}
 	}
@@ -98,13 +107,49 @@ func (b *Board) Draw(t pixel.Target, cells game.Grid) {
 	b.drawCells(t, cells)
 }
 
+// Resize the board with new dimensions.
+func (b *Board) Resize(w, h float64) {
+
+	fmt.Printf("Resizing to w: %v, h: %v\n", w, h)
+
+	// expand viewable area for cells
+	visibleBoardW = int(math.Ceil((w-300)/sprites.Cell1.Frame().W())) + 1
+	visibleBoardH = int(math.Ceil(h/sprites.Cell1.Frame().H())) + 1
+
+	fmt.Printf("visibleBoard: (%v, %v)\n", visibleBoardW, visibleBoardH)
+
+	// expand viewable area for grass
+	boardMaxX = int(math.Ceil(((math.Ceil((w-300)/sprites.Grass1.Frame().W()))+2)/defaultBoardMaxX)) * defaultBoardMaxX
+	boardMaxY = int(math.Ceil(((math.Ceil(h/sprites.Grass1.Frame().H()))+2)/defaultBoardMaxY)) * defaultBoardMaxY
+
+	// do not allow board to shrink smaller than default
+	if boardMaxX < defaultBoardMaxX {
+		boardMaxX = defaultBoardMaxX
+	}
+	if boardMaxY < defaultBoardMaxY {
+		boardMaxY = defaultBoardMaxY
+	}
+
+	fmt.Printf("boardMax: (%v, %v)\n", boardMaxX, boardMaxY)
+
+	// expand grid size
+	grassGrid := make([][]int, boardMaxX)
+	for x := 0; x < boardMaxX; x++ {
+		grassGrid[x] = make([]int, boardMaxY)
+		for y := 0; y < boardMaxY; y++ {
+			grassGrid[x][y] = b.grassGrid[x%defaultBoardMaxX][y%defaultBoardMaxY]
+		}
+	}
+	b.grassGrid = grassGrid
+}
+
 // drawGrass will draw the grass tiles to the board.
 func (b *Board) drawGrass(t pixel.Target) {
 	b.grassBatch.Clear()
 
 	// use values normalized to the size of the board
-	normW := boardMaxX * sprites.Grass1.Frame().W()
-	normH := boardMaxY * sprites.Grass1.Frame().H()
+	normW := float64(boardMaxX) * sprites.Grass1.Frame().W()
+	normH := float64(boardMaxY) * sprites.Grass1.Frame().H()
 
 	normX := math.Mod(boardPos.X, normW)
 	if normX < 0 {
