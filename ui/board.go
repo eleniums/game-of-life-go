@@ -119,8 +119,8 @@ func (b *Board) Resize(w, h float64) {
 	fmt.Printf("visibleBoard: (%v, %v)\n", visibleBoardW, visibleBoardH)
 
 	// expand viewable area for grass
-	boardMaxX = int(math.Ceil(((math.Ceil((w-300)/sprites.Grass1.Frame().W()))+2)/defaultBoardMaxX)) * defaultBoardMaxX
-	boardMaxY = int(math.Ceil(((math.Ceil(h/sprites.Grass1.Frame().H()))+2)/defaultBoardMaxY)) * defaultBoardMaxY
+	boardMaxX = int(math.Ceil(((w-300)/sprites.Grass1.Frame().W()+2)/defaultBoardMaxX)) * defaultBoardMaxX
+	boardMaxY = int(math.Ceil((h/sprites.Grass1.Frame().H()+2)/defaultBoardMaxY)) * defaultBoardMaxY
 
 	// do not allow board to shrink smaller than default
 	if boardMaxX < defaultBoardMaxX {
