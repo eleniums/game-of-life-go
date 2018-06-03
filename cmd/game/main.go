@@ -22,7 +22,6 @@ func main() {
 
 func run() {
 	interval := flag.Int("interval", 100, "simulation update interval in ms")
-	resizable := flag.Bool("resizable", false, "allow resizing of the main window")
 	disableVsync := flag.Bool("disable-vsync", false, "disable vertical sync with refresh rate of monitor")
 	pattern := flag.String("pattern", "", "name of pattern file in testdata to load as initial state (ex: -pattern diehard)")
 	reproduce := flag.String("reproduce", "majority-wins", "how to determine cell type when cell becomes alive (majority-wins|random-percentage)")
@@ -44,7 +43,7 @@ func run() {
 		Icon:      []pixel.Picture{assets.Icon16x16},
 		Bounds:    pixel.R(0, 0, 1260, 960),
 		VSync:     !*disableVsync, // update at the refresh rate of the monitor
-		Resizable: *resizable,
+		Resizable: true,
 	}
 	win, err := pixelgl.NewWindow(cfg)
 	if err != nil {
