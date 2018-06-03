@@ -24,7 +24,7 @@ func run() {
 	interval := flag.Int("interval", 100, "simulation update interval in ms")
 	resizable := flag.Bool("resizable", false, "allow resizing of the main window")
 	disableVsync := flag.Bool("disable-vsync", false, "disable vertical sync with refresh rate of monitor")
-	pattern := flag.String("pattern", "", "name of pattern file in testdata to load as initial state (ex: -pattern diehard)")
+	pattern := flag.String("pattern", "", "name of pattern file to load as initial state (ex: -pattern ./testdata/diehard)")
 	reproduce := flag.String("reproduce", "majority-wins", "how to determine cell type when cell becomes alive (majority-wins|random-percentage)")
 	flag.Parse()
 
