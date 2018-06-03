@@ -3,7 +3,12 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
+	"log"
 	"os"
+)
+
+const (
+	outputFile = "file.go"
 )
 
 // Tool for converting a file to a byte array.
@@ -11,15 +16,19 @@ import (
 func main() {
 	path := os.Args[1]
 
+	log.Printf("File path: %s", path)
+
 	data, err := ioutil.ReadFile(path)
 	if err != nil {
-		panic(fmt.Sprintf("unable to read file at %s: %v", path, err))
+		log.Fatalf("Unable to read file: %v", err)
 	}
 
 	str := fmt.Sprintf("package files\nvar (\nsome_file = %#v\n)", data)
 
-	err = ioutil.WriteFile("files.go", []byte(str), 0644)
+	err = ioutil.WriteFile(outputFile, []byte(str), 0644)
 	if err != nil {
-		panic(fmt.Sprintf("unable to write file bytes: %v", err))
+		log.Fatalf("Unable to write file bytes: %v", err)
 	}
+
+	log.Printf("Converted file to bytes and saved as %s", outputFile)
 }
