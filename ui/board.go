@@ -122,14 +122,6 @@ func (b *Board) Resize(w, h float64) {
 	boardMaxX = int(math.Ceil(((w-300)/sprites.Grass1.Frame().W()+2)/defaultBoardMaxX)) * defaultBoardMaxX
 	boardMaxY = int(math.Ceil((h/sprites.Grass1.Frame().H()+2)/defaultBoardMaxY)) * defaultBoardMaxY
 
-	// do not allow board to shrink smaller than default
-	if boardMaxX < defaultBoardMaxX {
-		boardMaxX = defaultBoardMaxX
-	}
-	if boardMaxY < defaultBoardMaxY {
-		boardMaxY = defaultBoardMaxY
-	}
-
 	fmt.Printf("boardMax: (%v, %v)\n", boardMaxX, boardMaxY)
 
 	// expand grid size
