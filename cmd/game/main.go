@@ -23,6 +23,7 @@ func main() {
 func run() {
 	interval := flag.Int("interval", 100, "simulation update interval in ms")
 	disableVsync := flag.Bool("disable-vsync", false, "disable vertical sync with refresh rate of monitor")
+	fps := flag.Bool("fps", false, "display frames per second")
 	pattern := flag.String("pattern", "", "name of pattern file to load as initial state (ex: -pattern ./testdata/diehard)")
 	reproduce := flag.String("reproduce", "majority-wins", "how to determine cell type when cell becomes alive (majority-wins|random-percentage)")
 	flag.Parse()
@@ -92,7 +93,9 @@ func run() {
 		frames++
 		select {
 		case <-second:
-			win.SetTitle(fmt.Sprintf("%s | FPS: %d", cfg.Title, frames))
+			if *fps {
+				win.SetTitle(fmt.Sprintf("%s | FPS: %d", cfg.Title, frames))
+			}
 			frames = 0
 		default:
 		}
