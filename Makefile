@@ -14,7 +14,7 @@ dep: ## Retrieve all dependencies
 build: $(EXECUTABLE) ## Build executable
 
 $(EXECUTABLE):
-	go build -o $(EXECUTABLE) ./cmd/game/main.go
+	go build -i -v -o $(EXECUTABLE) ./cmd/game/main.go
 
 clean: ## Remove previous build
 	rm $(EXECUTABLE)
