@@ -15,6 +15,8 @@ import (
 	"github.com/faiface/pixel/pixelgl"
 )
 
+var version = "v1.1.0"
+
 func main() {
 	// pixel will run on the main thread
 	pixelgl.Run(run)
@@ -40,7 +42,7 @@ func run() {
 
 	// create new window
 	cfg := pixelgl.WindowConfig{
-		Title:     "Game of Life",
+		Title:     fmt.Sprintf("Game of Life (%s)", version),
 		Icon:      []pixel.Picture{assets.Icon16x16},
 		Bounds:    pixel.R(0, 0, 1260, 960),
 		VSync:     !*disableVsync, // update at the refresh rate of the monitor
