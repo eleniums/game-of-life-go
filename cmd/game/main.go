@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"math/rand"
+	"strings"
 	"time"
 
 	"github.com/eleniums/game-of-life-go/assets"
@@ -15,9 +16,11 @@ import (
 	"github.com/faiface/pixel/pixelgl"
 )
 
-var version = "v1.1.0"
+var version = "dev"
 
 func main() {
+	log.Printf("Version: %s", version)
+
 	// pixel will run on the main thread
 	pixelgl.Run(run)
 }
@@ -42,7 +45,7 @@ func run() {
 
 	// create new window
 	cfg := pixelgl.WindowConfig{
-		Title:     fmt.Sprintf("Game of Life (%s)", version),
+		Title:     fmt.Sprintf("Game of Life (%s)", strings.Split(version, "-")[0]),
 		Icon:      []pixel.Picture{assets.Icon16x16},
 		Bounds:    pixel.R(0, 0, 1260, 960),
 		VSync:     !*disableVsync, // update at the refresh rate of the monitor

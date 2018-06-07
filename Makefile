@@ -1,6 +1,7 @@
 EXECUTABLE=gameoflife.exe
+VERSION=$(shell git describe --tags --always --long --dirty)
 
-all: build test ## Build and run tests
+all: test build ## Build and run tests
 
 test: ## Run unit tests
 	./scripts/test_unit.sh
@@ -14,7 +15,8 @@ dep: ## Retrieve all dependencies
 build: $(EXECUTABLE) ## Build executable
 
 $(EXECUTABLE):
-	go build -i -v -o $(EXECUTABLE) ./cmd/game/main.go
+	@echo version: $(VERSION)
+	go build -i -v -o $(EXECUTABLE) -ldflags="-s -w -X main.version=$(VERSION)"  ./cmd/game/main.go
 
 clean: ## Remove previous build
 	rm $(EXECUTABLE)
