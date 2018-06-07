@@ -35,3 +35,18 @@ Conway's Game of Life is a zero player game, meaning the player sets an initial 
 - If there are exactly 3 living cells surrounding a dead cell, it will become alive, as if by reproduction.
 
 This leads to many interesting patterns and is fascinating to mess around with. Interestingly enough, it is also Turing complete, meaning it can simulate a computer. The Game of Life itself has been built with the Game of Life!
+
+## Instructions
+
+- Input
+    - Right mouse button: Add a new cell to the grid.
+    - Left mouse button: Remove an existing cell from the grid.
+    - Arrow keys: Scroll around the grid.
+    - Spacebar: Reset the scroll position to the default.
+- Menu
+    - Start/Stop: Start or stop the simulation.
+    - Store: Store current grid state in memory.
+    - Reset: Reset the grid to the state saved in memory.
+    - Clear: Clear the grid completely.
+    - Save: Save the current grid state to a file named "saved".
+    - Cells: Select the cell type to place on the grid.

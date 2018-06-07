@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"math/rand"
+	"strings"
 	"time"
 
 	"github.com/eleniums/game-of-life-go/assets"
@@ -15,7 +16,11 @@ import (
 	"github.com/faiface/pixel/pixelgl"
 )
 
+var version = "dev"
+
 func main() {
+	log.Printf("Version: %s", version)
+
 	// pixel will run on the main thread
 	pixelgl.Run(run)
 }
@@ -23,6 +28,7 @@ func main() {
 func run() {
 	interval := flag.Int("interval", 100, "simulation update interval in ms")
 	disableVsync := flag.Bool("disable-vsync", false, "disable vertical sync with refresh rate of monitor")
+	fps := flag.Bool("fps", false, "display frames per second")
 	pattern := flag.String("pattern", "", "name of pattern file to load as initial state (ex: -pattern ./testdata/diehard)")
 	reproduce := flag.String("reproduce", "majority-wins", "how to determine cell type when cell becomes alive (majority-wins|random-percentage)")
 	flag.Parse()
@@ -39,7 +45,7 @@ func run() {
 
 	// create new window
 	cfg := pixelgl.WindowConfig{
-		Title:     "Game of Life",
+		Title:     fmt.Sprintf("Game of Life (%s)", strings.Split(version, "-")[0]),
 		Icon:      []pixel.Picture{assets.Icon16x16},
 		Bounds:    pixel.R(0, 0, 1260, 960),
 		VSync:     !*disableVsync, // update at the refresh rate of the monitor
@@ -92,7 +98,9 @@ func run() {
 		frames++
 		select {
 		case <-second:
-			win.SetTitle(fmt.Sprintf("%s | FPS: %d", cfg.Title, frames))
+			if *fps {
+				win.SetTitle(fmt.Sprintf("%s | FPS: %d", cfg.Title, frames))
+			}
 			frames = 0
 		default:
 		}
