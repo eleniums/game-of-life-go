@@ -10,7 +10,6 @@ An adaptation of [Conway's Game of Life](https://en.wikipedia.org/wiki/Conway%27
 
 ```
 go get -u github.com/eleniums/game-of-life-go
-dep ensure
 ```
 
 ## Run
