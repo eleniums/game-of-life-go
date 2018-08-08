@@ -12,3 +12,12 @@
 
 # Project-local glide cache, RE: https://github.com/Masterminds/glide/issues/736
 .glide/
+
+# Ignore releases
+release/
+*_windows_*
+*-windows-*
+*_linux_*
+*-linux-*
+*_darwin_*
+*-darwin-*
