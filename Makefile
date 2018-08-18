@@ -15,7 +15,7 @@ bench: ## Run benchmark tests
 	./scripts/test_bench.sh
 
 dep: ## Retrieve all dependencies
-	dep ensure
+	dep ensure -v
 
 build: $(WINDOWS) ## Build binaries
 	@echo version: $(VERSION)
