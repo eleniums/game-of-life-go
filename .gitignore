@@ -15,9 +15,5 @@
 
 # Ignore releases
 release/
-*_windows_*
-*-windows-*
-*_linux_*
-*-linux-*
-*_darwin_*
-*-darwin-*
+gameoflife_*
+gameoflife-*
