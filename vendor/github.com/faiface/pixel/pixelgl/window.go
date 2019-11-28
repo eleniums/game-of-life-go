@@ -116,6 +116,7 @@ func NewWindow(cfg WindowConfig) (*Window, error) {
 
 		// enter the OpenGL context
 		w.begin()
+		glhf.Init()
 		w.end()
 
 		return nil
@@ -362,7 +363,6 @@ func (w *Window) CursorVisible() bool {
 func (w *Window) begin() {
 	if currWin != w {
 		w.window.MakeContextCurrent()
-		glhf.Init()
 		currWin = w
 	}
 }
@@ -423,4 +423,9 @@ func (w *Window) Clear(c color.Color) {
 // Color returns the color of the pixel over the given position inside the Window.
 func (w *Window) Color(at pixel.Vec) pixel.RGBA {
 	return w.canvas.Color(at)
+}
+
+// Canvas returns the window's underlying Canvas
+func (w *Window) Canvas() *Canvas {
+	return w.canvas
 }
