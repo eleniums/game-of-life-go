@@ -27,7 +27,7 @@
 
 [[constraint]]
   name = "github.com/faiface/pixel"
-  version = "0.7.0"
+  version = "0.8.0"
 
 [prune]
   go-tests = true
