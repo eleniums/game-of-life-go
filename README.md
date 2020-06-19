@@ -39,8 +39,8 @@ This leads to many interesting patterns and is fascinating to mess around with. 
 ## Instructions
 
 - Input
-    - Right mouse button: Add a new cell to the grid.
-    - Left mouse button: Remove an existing cell from the grid.
+    - Left mouse button: Add a new cell to the grid.
+    - Right mouse button: Remove an existing cell from the grid.
     - Arrow keys: Scroll around the grid.
     - Spacebar: Reset the scroll position to the default.
 - Menu
