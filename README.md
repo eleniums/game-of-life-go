@@ -21,7 +21,8 @@ go run ./cmd/game/main.go
 ## Prerequisites
 
 - Requires Go 1.8 or later
-- Requires GCC (follow instructions [here](https://github.com/faiface/pixel/wiki/Building-Pixel-on-Windows) to install [MSYS2](http://www.msys2.org) and [MinGW](http://www.mingw.org))
+- Requires GCC (Windows: follow instructions [here](https://github.com/faiface/pixel/wiki/Building-Pixel-on-Windows) to install [MSYS2](http://www.msys2.org) and [MinGW](http://www.mingw.org))
+- Requires GLFW (follow instructions [here](https://github.com/go-gl/glfw#installation) to install)
 - Uses [xgo](https://github.com/karalabe/xgo) for cross-compiling with CGO
 - Uses [pixel](https://github.com/faiface/pixel) for graphics and input
 
